@@ -1,29 +1,35 @@
+# -*- coding:utf-8 -*-
+
 import pycurl, urllib
 
+def getLoginCookie(mail, passwd, cookie):
+	params = {
+		'mail': mail,
+		'password': passwd,
+		'next_url': '',
+		'site': "niconico"}
 
-def getLoginCookie(mail, password, cookiename):
-    opt = {'mail': mail,
-           'password': password}
+	params_encoded = urllib.urlencode(params)
 
-    c = pycurl.Curl()
+	curl = pycurl.Curl()
+	curl.setopt(pycurl.URL, "https://secure.nicovideo.jp/secure/login")
+	curl.setopt(pycurl.POSTFIELDS, params_encoded)
+	curl.setopt(pycurl.POST, 1)
 
-    c.setopt(c.URL, 'https://secure.nicovideo.jp/secure/login?site=niconico')
-    c.setopt(pycurl.POST, 1)
-    c.setopt(pycurl.POSTFIELDS, urllib.urlencode(opt))
-    c.setopt(pycurl.SSLVERSION, pycurl.SSLVERSION_SSLv3)
-    c.setopt(pycurl.COOKIEJAR, cookiename)
+	curl.setopt(pycurl.SSLVERSION, 3)
+	curl.setopt(pycurl.COOKIEJAR, cookie)
 
-    c.perform()
+	curl.perform()
 
 
-if __name__ == "__main__":
-    cookiefile = "cookie"
-    with open("auth", "r") as f:
-        lines = f.readlines()
+if __name__ == '__main__':
+    cookie = 'cookie'
+    with open('auth', 'r') as f:
+        lines = f.read().split(',')
         mail = lines[0]
         passwd = lines[1]
 
-    getLoginCookie(mail, passwd, cookiefile)
+    getLoginCookie(mail, passwd, cookie)
 
-    with open(cookiefile, "r") as f:
+    with open(cookie, 'r') as f:
         print f.read()

@@ -25,16 +25,15 @@ def getmllst(cookie):
 
     for i, name in enumerate(mlnames):
         if name.startswith('\\'):
-            result = ''
-            chars = name.split('\\')
-            chars = map(lambda char: char.replace('u', ''), chars)
-            chars = map(lambda char: unichr(int(char, 16)).encode('utf-8'), chars[1:])
-            for c in chars:
-                result += c
-            mlnames[i] = result
+            mlnames[i] = _convunichrs(name)
 
     return mlnames
 
+def _convunichrs(unistr):
+    chars = unistr.split('\\u')
+    chars = map(lambda char: unichr(int(char, 16)).encode('utf-8'), chars[1:])
+
+    return ''.join(chars)
 
 if __name__ == '__main__':
     cookie = 'cookie'
