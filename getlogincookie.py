@@ -1,25 +1,19 @@
 # -*- coding:utf-8 -*-
 
-import pycurl, urllib
+import nicoreq
 
 def getLoginCookie(mail, passwd, cookie):
+	url = "https://secure.nicovideo.jp/secure/login"
 	params = {
 		'mail': mail,
 		'password': passwd,
 		'next_url': '',
 		'site': "niconico"}
 
-	params_encoded = urllib.urlencode(params)
-
-	curl = pycurl.Curl()
-	curl.setopt(pycurl.URL, "https://secure.nicovideo.jp/secure/login")
-	curl.setopt(pycurl.POSTFIELDS, params_encoded)
-	curl.setopt(pycurl.POST, 1)
-
-	curl.setopt(pycurl.SSLVERSION, 3)
-	curl.setopt(pycurl.COOKIEJAR, cookie)
-
-	curl.perform()
+	nicoreq.getres(url,
+		       cookie_out=cookie,
+		       post_params=params,
+		       require_ssl=True)
 
 
 if __name__ == '__main__':

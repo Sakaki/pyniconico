@@ -1,31 +1,25 @@
-import pycurl
-import cStringIO
+# -*- coding:utf-8 -*-
+
+import nicoreq
 
 def getmllst(cookie):
-    buf = cStringIO.StringIO()
-
-    c = pycurl.Curl()
-    c.setopt(c.URL, 'http://www.nicovideo.jp/api/mylistgroup/list')
-    c.setopt(pycurl.COOKIEFILE, cookie)
-    c.setopt(c.WRITEFUNCTION, buf.write)
-
-    c.perform()
-
-    text = buf.getvalue()
-    buf.close()
+    url = 'http://www.nicovideo.jp/api/mylistgroup/list'
+    text = nicoreq.getres(url, cookie_in=cookie)
 
     text = text.split('"')
     mlnames = []
 
     index = 0
     while(index < len(text)):
-        if text[index] == 'name':
-            mlnames.append(text[index+2])
+        if text[index] == 'id':
+            item = {}
+            item['id'] = text[index+2]
+            name = text[index+10]
+            if name.startswith('\\'):
+                name = _convunichrs(name)
+            item['name'] = name
+            mlnames.append(item)
         index += 1
-
-    for i, name in enumerate(mlnames):
-        if name.startswith('\\'):
-            mlnames[i] = _convunichrs(name)
 
     return mlnames
 
@@ -39,5 +33,5 @@ if __name__ == '__main__':
     cookie = 'cookie'
     lst = getmllst(cookie)
 
-    for name in lst:
-        print name
+    for item in lst:
+        print item['name'], item['id']
