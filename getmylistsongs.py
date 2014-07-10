@@ -1,9 +1,7 @@
 # -*- coding:utf-8 -*-
 from sys import argv
-import pycurl, urllib
-import cStringIO
 
-import gettoken, getmylist
+import nicoreq, gettoken, getmylist
 
 def getMylistSongs(mylistname, cookie):
     token = gettoken.getToken(cookie)
@@ -11,10 +9,10 @@ def getMylistSongs(mylistname, cookie):
         if item['name'] == mylistname:
             gid = item['id']
 
-    opts = {'group_id': gid,
+    params = {'group_id': gid,
             'token': token}
 
-    buf = cStringIO.StringIO()
+    """buf = cStringIO.StringIO()
 
     curl = pycurl.Curl()
     curl.setopt(pycurl.URL, 'http://www.nicovideo.jp/api/mylist/list')
@@ -26,8 +24,12 @@ def getMylistSongs(mylistname, cookie):
     curl.perform()
 
     res = buf.getvalue()
-    buf.close()
+    buf.close()"""
 
+    url = 'http://www.nicovideo.jp/api/mylist/list'
+    res = nicoreq.getres(url,
+                         cookie_in=cookie,
+                         post_params=params)
     res = res.split('"');
 
     ids = []
