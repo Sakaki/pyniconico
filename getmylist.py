@@ -1,6 +1,6 @@
 # -*- coding:utf-8 -*-
 
-import nicoreq
+import nicoreq, convunichrs
 
 def getmllst(cookie):
     url = 'http://www.nicovideo.jp/api/mylistgroup/list'
@@ -16,18 +16,13 @@ def getmllst(cookie):
             item['id'] = text[index+2]
             name = text[index+10]
             if name.startswith('\\'):
-                name = _convunichrs(name)
+                name = convunichrs.convert(name)
             item['name'] = name
             mlnames.append(item)
         index += 1
 
     return mlnames
 
-def _convunichrs(unistr):
-    chars = unistr.split('\\u')
-    chars = map(lambda char: unichr(int(char, 16)).encode('utf-8'), chars[1:])
-
-    return ''.join(chars)
 
 if __name__ == '__main__':
     cookie = 'cookie'
