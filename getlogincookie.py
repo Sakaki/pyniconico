@@ -3,17 +3,17 @@
 import nicoreq
 
 def getLoginCookie(mail, passwd, cookie):
-	url = "https://secure.nicovideo.jp/secure/login"
-	params = {
-		'mail': mail,
-		'password': passwd,
-		'next_url': '',
-		'site': "niconico"}
+    url = "https://secure.nicovideo.jp/secure/login"
+    params = {
+	    'mail': mail,
+	    'password': passwd,
+	    'next_url': '',
+	    'site': "niconico"}
 
-	nicoreq.getres(url,
-		       cookie_out=cookie,
-		       post_params=params,
-		       require_ssl=True)
+    nicoreq.getres(url,
+		   cookie_out=cookie,
+		   post_params=params,
+		   require_ssl=True)
 
 
 if __name__ == '__main__':

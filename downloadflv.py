@@ -1,13 +1,13 @@
 # -*- coding:utf-8 -*-
 
-import urllib, re, sys
+import urllib, re, sys, os
 import nicoreq, convunichrs
 
 def _getsonginfo(regexp, page):
     temp = re.search(regexp, page)
     return temp.group(1)
 
-def download(vid, cookie):
+def download(vid, cookie, loc='./', overwrite=True):
     url = 'http://www.nicovideo.jp/watch/'+vid
     vpage = nicoreq.getres(url,
                            cookie_in=cookie,
@@ -26,7 +26,11 @@ def download(vid, cookie):
     videourl = res.split('&')[2].replace('url=', '')
     videourl = urllib.unquote(videourl)
 
-    with open(title+'.flv', 'wb') as f:
+    videofile = loc+title+'.flv'
+    if not overwrite and os.path.exists(videofile):
+        return None
+
+    with open(videofile, 'wb') as f:
         print 'Downloading...'
         res = nicoreq.getres(videourl,
                              cookie_in=cookie)
