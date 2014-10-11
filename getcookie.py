@@ -2,7 +2,7 @@
 
 import nicoreq, re, netrc
 
-def getLoginCookie(mail, passwd, cookie):
+def getCookie(mail, passwd, cookie):
     url = "https://secure.nicovideo.jp/secure/login"
     params = {
 	    'mail': mail,
@@ -14,6 +14,8 @@ def getLoginCookie(mail, passwd, cookie):
 		   cookie_out=cookie,
 		   post_params=params,
 		   require_ssl=True)
+
+    return checkLogin(cookie)
 
 def checkLogin(cookie):
     url = 'http://www.nicovideo.jp/my/mylist'
