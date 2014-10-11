@@ -13,7 +13,7 @@ def download(vid, cookie, loc='./', overwrite=True):
                            cookie_in=cookie,
                            cookie_out=cookie)
 
-    title = _getsonginfo('<span class="videoHeaderTitle">(.*?)<\/span>', vpage)
+    title = _getsonginfo('<span class="videoHeaderTitle" style="font-size:24px">(.*?)<\/span>', vpage)
     author = _getsonginfo('nickname&quot;:&quot;(.*?) \\\u3055\\\u3093&quot', vpage)
     author = convunichrs.convert(author)
 
