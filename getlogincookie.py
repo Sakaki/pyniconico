@@ -1,6 +1,6 @@
 # -*- coding:utf-8 -*-
 
-import nicoreq, re
+import nicoreq, re, netrc
 
 def getLoginCookie(mail, passwd, cookie):
     url = "https://secure.nicovideo.jp/secure/login"
@@ -26,15 +26,16 @@ def checkLogin(cookie):
     else:
         return False
 
+def getLoginInfo():
+    auth = netrc.netrc()
+    mail, a, passwd = auth.authenticators("nicovideo")
+    return mail, passwd
 
 if __name__ == '__main__':
     cookie = 'cookie'
-    with open('auth', 'r') as f:
-        lines = f.read().split(',')
-        mail = lines[0]
-        passwd = lines[1]
-
+    mail, passwd = getLoginInfo()
     getLoginCookie(mail, passwd, cookie)
+
     if checkLogin(cookie):
         print 'ログイン成功'
     else:
