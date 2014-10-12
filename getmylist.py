@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 
-import nicoreq, convunichrs
-from command import Command
+from tools import nicoreq, convunichrs
+from tools.command import Command
 
 class MyList(Command):
     cmdname = 'getmylist'

@@ -1,7 +1,8 @@
 # -*- coding:utf-8 -*-
 
-import nicoreq, gettoken, getmylist
-from command import Command
+import getmylist
+from tools import nicoreq, gettoken
+from tools.command import Command
 
 class GetMLSongs(Command):
     cmdname = 'get songs in mylist'

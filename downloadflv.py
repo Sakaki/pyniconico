@@ -1,8 +1,8 @@
 # -*- coding:utf-8 -*-
 
 import urllib, re, sys, os
-import nicoreq, convunichrs
-from command import Command
+from tools import nicoreq, convunichrs
+from tools.command import Command
 
 class DownloadFlv(Command):
     cmdname = 'download niconico flv'
@@ -14,7 +14,7 @@ class DownloadFlv(Command):
                                  help='video id')
         self.parser.add_argument('-o', '--output',
                                  dest='location',
-                                 default='./',
+                                 default='./video/',
                                  help='video output')
         self.parser.add_argument('-f', '--force',
                                  dest='overwrite',
