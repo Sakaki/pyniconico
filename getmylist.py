@@ -6,9 +6,9 @@ from command import Command
 class MyList(Command):
     cmdname = 'getmylist'
 
-    def __init__(self):
+    def __init__(self, args):
         super(MyList, self).__init__()
-        self.setParser()
+        self.setParser(args)
 
     def invoke(self):
         url = 'http://www.nicovideo.jp/api/mylistgroup/list'
@@ -34,7 +34,7 @@ class MyList(Command):
 
 if __name__ == '__main__':
     cookie = 'cookie'
-    lst = MyList().invoke()
+    lst = MyList(None).invoke()
 
     for item in lst:
         print item['name'], item['id']
