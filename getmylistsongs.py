@@ -10,6 +10,10 @@ class GetMLSongs(Command):
 
     def __init__(self, args):
         super(GetMLSongs, self).__init__()
+        self.parser.add_argument('--raw',
+                                 dest='raw',
+                                 action='store_true',
+                                 help='raw output')
         self.parser.add_argument('-n', '--name',
                                  dest='mlname',
                                  default=None,
@@ -26,10 +30,14 @@ class GetMLSongs(Command):
                 mlnames.append(mldic['name'])
 
         for mlname in mlnames:
-            print mlname+':'
+            spacer = ''
+            if not self.args.raw:
+                print mlname+':'
+                spacer = '  '
+
             ids = self.getMLSongs(mlname)
             for vid in ids:
-                print '  '+vid
+                print spacer+vid
 
     def getMLSongs(self, mylistname):
         token = gettoken.getToken(self.cookie)
@@ -58,13 +66,3 @@ class GetMLSongs(Command):
 
 if __name__ == '__main__':
     GetMLSongs(None).invoke()
-
-    """cookie = 'cookie'
-    mllst = getmylist.getmllst(cookie)
-
-    for mldict in mllst:
-        mlname = mldict['name']
-        print mlname+':'
-        ids = getMylistSongs(mlname, cookie)
-        for vid in ids:
-            print '  '+vid"""
