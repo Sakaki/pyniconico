@@ -12,10 +12,10 @@ class DownloadFlv(Command):
         self.parser.add_argument('vid',
                                  metavar='VID',
                                  help='video id')
-        self.parser.add_argument('-o', '--output',
+        self.parser.add_argument('-l', '--location',
                                  dest='location',
                                  default='./video/',
-                                 help='video output')
+                                 help='video output folder')
         self.parser.add_argument('-f', '--force',
                                  dest='overwrite',
                                  action='store_true',
@@ -55,7 +55,7 @@ class DownloadFlv(Command):
             print 'Downloading...'
             res = nicoreq.getres(videourl,
                                  cookie_in=self.cookie)
-            print 'finished. Writing to file...'
+            print 'finished. Writing to "{0}"'.format(videofile)
             f.write(res)
 
         return {'title': title,

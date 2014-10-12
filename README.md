@@ -33,7 +33,7 @@ optional arguments:
                         username
   -p PASSWD, --password PASSWD
                         password
-  -o LOCATION, --output LOCATION
+  -l LOCATION, --location LOCATION
                         video output
   -f, --force           allow overwrite
   ```
