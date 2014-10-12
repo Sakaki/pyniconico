@@ -17,8 +17,9 @@ class Command(object):
                                  default=None,
                                  help='password')
 
-    def setParser(self):
-        args = self.parser.parse_args()
+    def setParser(self, args=None):
+        if not args:
+            args = self.parser.parse_args()
         mail = args.mail
         passwd = args.passwd
 
