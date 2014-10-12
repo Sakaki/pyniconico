@@ -45,10 +45,13 @@ class GetMLSongs(Command):
             if item['name'] == mylistname:
                 gid = item['id']
 
-        params = {'group_id': gid,
-                  'token': token}
+        params = {'token': token}
+        if gid != '':
+            params['group_id'] = gid
+            url = 'http://www.nicovideo.jp/api/mylist/list'
+        else:
+            url = 'http://www.nicovideo.jp/api/deflist/list'
 
-        url = 'http://www.nicovideo.jp/api/mylist/list'
         res = nicoreq.getres(url,
                              cookie_in=self.cookie,
                              post_params=params)

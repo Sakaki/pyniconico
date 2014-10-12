@@ -29,6 +29,8 @@ class MyList(Command):
                 mlnames.append(item)
             index += 1
 
+        mlnames.append({'name': 'とりあえずマイリスト', 'id': ''})
+
         return mlnames
 
 
