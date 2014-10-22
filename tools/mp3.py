@@ -7,9 +7,11 @@ def convert(infile, bitrate, author, title, album='niconico'):
     outfile = infile.replace('.flv', '.mp3')
     coverart = infile.replace('.flv', '.jpg')
 
+    os.system('ffmpeg -y -i "{0}" -ab {1}k "{2}"'.format(infile, bitrate, outfile))
+
     w, h = getSize(infile)
     startpos = (w-h)/2
-    ffstr = 'ffmpeg -ss 50 -i {3} -vframes 1 -vf crop={0}:{0}:{1}:{2} -f image2 {4}'
+    ffstr = 'ffmpeg -ss 50 -y -i "{3}" -vframes 1 -vf crop={0}:{0}:{1}:{2} -f image2 "{4}"'
     os.system(ffstr.format(h, startpos, 0, infile, coverart))
 
     audiotag = eyed3.load(outfile.decode('utf-8'))
@@ -22,8 +24,10 @@ def convert(infile, bitrate, author, title, album='niconico'):
     audiotag.tag.images.set(3, image, 'image/jpeg',u'made by ffmpeg')
     audiotag.tag.save()
 
+    os.remove(coverart)
+
 def getSize(filename):
-    videoinf = getoutput('ffmpeg -i {0}'.format(filename))
+    videoinf = getoutput('ffmpeg -y -i "{0}"'.format(filename))
     videoinf = videoinf.split('\n')
     for line in videoinf:
         if 'Stream #0:0' in line:

@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 
 import urllib, re, sys, os
-from tools import nicoreq, convunichrs
+from tools import nicoreq, convunichrs, mp3
 from tools.command import Command
 
 class DownloadFlv(Command):
@@ -20,6 +20,14 @@ class DownloadFlv(Command):
                                  dest='overwrite',
                                  action='store_true',
                                  help='allow overwrite')
+        self.parser.add_argument('--mp3',
+                                 dest='mp3conv',
+                                 action='store_true',
+                                 help='convert to mp3')
+        self.parser.add_argument('-b', '--bitrate',
+                                 dest='bitrate',
+                                 default=192,
+                                 help='mp3 bitrate')
         self.setParser(args)
 
     def _getsonginfo(self, regexp, page):
@@ -58,8 +66,8 @@ class DownloadFlv(Command):
             print 'finished. Writing to "{0}"'.format(videofile)
             f.write(res)
 
-        return {'title': title,
-                'author': author}
+        if self.args.mp3conv:
+            mp3.convert(videofile, self.args.bitrate, author, title)
 
 
 if __name__ == '__main__':
