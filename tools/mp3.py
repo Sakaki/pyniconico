@@ -1,0 +1,37 @@
+# -*- coding:utf-8 -*-
+
+import os, eyed3, re
+from commands import getoutput
+
+def convert(infile, bitrate, author, title, album='niconico'):
+    outfile = infile.replace('.flv', '.mp3')
+    coverart = infile.replace('.flv', '.jpg')
+
+    w, h = getSize(infile)
+    startpos = (w-h)/2
+    ffstr = 'ffmpeg -ss 50 -i {3} -vframes 1 -vf crop={0}:{0}:{1}:{2} -f image2 {4}'
+    os.system(ffstr.format(h, startpos, 0, infile, coverart))
+
+    audiotag = eyed3.load(outfile.decode('utf-8'))
+    audiotag.tag.version = (2, 3, 0)
+    audiotag.tag.artist = author.decode('utf-8')
+    audiotag.tag.album = album.decode('utf-8')
+    audiotag.tag.title = title.decode('utf-8')
+    with open(coverart, 'rb') as f:
+        image = f.read()
+    audiotag.tag.images.set(3, image, 'image/jpeg',u'made by ffmpeg')
+    audiotag.tag.save()
+
+def getSize(filename):
+    videoinf = getoutput('ffmpeg -i {0}'.format(filename))
+    videoinf = videoinf.split('\n')
+    for line in videoinf:
+        if 'Stream #0:0' in line:
+            cropline = line
+            print cropline
+    cropline = re.search('[0-9]*x[0-9]*,', cropline)
+    pos = cropline.group(0)[0:-1].split('x')
+    width = int(pos[0])
+    height = int(pos[1])
+
+    return width, height
