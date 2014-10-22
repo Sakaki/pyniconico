@@ -43,7 +43,7 @@ optional arguments:
 例えばtestというマイリストにある動画を全てダウンロードしたい場合は、
 
 ```
-$ for id in `python getmylistsongs.py --raw test`
+$ for id in `python getmylistsongs.py --raw -n test`
 > do python downloadflv.py $id
 > done
 ```
