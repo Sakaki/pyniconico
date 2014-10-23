@@ -28,13 +28,8 @@ def convert(infile, bitrate, author, title, album='niconico'):
 
 def getSize(filename):
     videoinf = getoutput('ffmpeg -y -i "{0}"'.format(filename))
-    videoinf = videoinf.split('\n')
-    for line in videoinf:
-        if 'Stream #0:0' in line:
-            cropline = line
-            print cropline
-    cropline = re.search('[0-9]*x[0-9]*,', cropline)
-    pos = cropline.group(0)[0:-1].split('x')
+    cropline = re.search('[1-9][0-9]*x[1-9][0-9]*', videoinf)
+    pos = cropline.group(0).split('x')
     width = int(pos[0])
     height = int(pos[1])
 
