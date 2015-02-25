@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 
-import pycurl, urllib
-from cStringIO import StringIO
+import urllib, urllib2, urllib2_ssl, os
+from cookielib import LWPCookieJar
 
 def getres(url, cookie_in=None, cookie_out=None, post_params=None, require_ssl=False):
     """
@@ -12,23 +12,28 @@ def getres(url, cookie_in=None, cookie_out=None, post_params=None, require_ssl=F
     :post_params: POSTする辞書リスト
     :require_ssl: 接続にSSL(v3)を使用するか
     """
-    buf = StringIO()
 
-    curl = pycurl.Curl()
-    curl.setopt(pycurl.URL, url)
-    if post_params:
-        curl.setopt(pycurl.POSTFIELDS, urllib.urlencode(post_params))
-        curl.setopt(pycurl.POST, 1)
     if require_ssl:
-        curl.setopt(pycurl.SSLVERSION, 3)
-    if cookie_in:
-        curl.setopt(pycurl.COOKIEFILE, cookie_in)
-    if cookie_out:
-        curl.setopt(pycurl.COOKIEJAR, cookie_out)
-    curl.setopt(curl.WRITEFUNCTION, buf.write)
+        #handler = urllib2_ssl.HTTPSHandler(ca_certs=os.path.dirname(__file__)+'/cert/cacert.pem')
+        handler = urllib2_ssl.TLS1Handler()
+    else:
+        handler = urllib2.HTTPHandler()
 
-    curl.perform()
-    res = buf.getvalue()
-    buf.close()
+    if cookie_in != None or cookie_out != None:
+        cookiejar = LWPCookieJar(cookie_in or cookie_out)
+        if cookie_in != None:
+            cookiejar.load()
+        cProcessor = urllib2.HTTPCookieProcessor(cookiejar)
+        opener = urllib2.build_opener(cProcessor, handler)
+    else:
+        opener = urllib2.build_opener(handler)
 
-    return res
+    if post_params != None:
+        res = opener.open(url, urllib.urlencode(post_params))
+    else:
+        res = opener.open(url)
+
+    if cookie_out != None:
+        cookiejar.save()
+
+    return res.read()

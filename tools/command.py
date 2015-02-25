@@ -1,6 +1,6 @@
 # -*- coding:utf-8 -*-
 
-import argparse
+from argparse import argparse
 import getcookie
 
 class Command(object):

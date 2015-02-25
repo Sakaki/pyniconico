@@ -36,7 +36,7 @@ def getLoginInfo():
 if __name__ == '__main__':
     cookie = 'cookie'
     mail, passwd = getLoginInfo()
-    getLoginCookie(mail, passwd, cookie)
+    getCookie(mail, passwd, cookie)
 
     if checkLogin(cookie):
         print 'ログイン成功'
