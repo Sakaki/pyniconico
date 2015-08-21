@@ -41,7 +41,7 @@ class DownloadFlv(Command):
                                cookie_in=self.cookie,
                                cookie_out=self.cookie)
 
-        title = self._getsonginfo('<span class="videoHeaderTitle" style="font-size:24px">(.*?)<\/span>', vpage)
+        title = self._getsonginfo('<span class="videoHeaderTitle" style="font-size:..px">(.*?)<\/span>', vpage)
         author = self._getsonginfo('nickname&quot;:&quot;(.*?) \\\u3055\\\u3093&quot', vpage)
         author = convunichrs.convert(author)
 
