@@ -49,7 +49,7 @@ optional arguments:
 
 ```
 $ for id in `python getmylistsongs.py --raw -n test`
-> do ./downloadflv.py $id
+> do python downloadflv.py $id
 > done
 ```
 

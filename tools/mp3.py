@@ -4,8 +4,8 @@ import os, eyed3, re
 from commands import getoutput
 
 def convert(infile, bitrate, author, title, album='niconico'):
-    outfile = infile.replace('.flv', '.mp3')
-    coverart = infile.replace('.flv', '.jpg')
+    outfile = infile.replace(infile[-4:], '.mp3')
+    coverart = infile.replace(infile[-4:], '.jpg')
 
     os.system('ffmpeg -y -i "{0}" -ab {1}k "{2}"'.format(infile, bitrate, outfile))
 
