@@ -52,3 +52,11 @@ coverage.xml
 # Sphinx documentation
 docs/_build/
 
+# downloaded videos
+video/*
+
+# cookie
+__cookie__
+
+# vim swp file
+*.swp

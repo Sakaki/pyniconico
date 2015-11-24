@@ -2,8 +2,9 @@
 
 import urllib, urllib2, urllib2_ssl, os
 from cookielib import LWPCookieJar
+from progressbar import ProgressBar, Percentage, Bar, ETA
 
-def getres(url, cookie_in=None, cookie_out=None, post_params=None, require_ssl=False):
+def getres(url, cookie_in=None, cookie_out=None, post_params=None, require_ssl=False, progressbar_info={"show_progress": False}):
     """
     HTTPリクエスト
     :url: リクエストを送信するURL
@@ -11,6 +12,7 @@ def getres(url, cookie_in=None, cookie_out=None, post_params=None, require_ssl=F
     :cookie_out: 書き込むクッキーファイル
     :post_params: POSTする辞書リスト
     :require_ssl: 接続にSSL(v3)を使用するか
+    :progressbar_info: プログレスバーの情報
     """
 
     if require_ssl:
@@ -33,7 +35,26 @@ def getres(url, cookie_in=None, cookie_out=None, post_params=None, require_ssl=F
     else:
         res = opener.open(url)
 
+    result = ""
+    if progressbar_info["show_progress"]:
+        size = progressbar_info["size"]
+        divsize = int(size/100)
+        downloaded = 0
+
+        widgets = ["Downloading: ", Percentage(), Bar(), ETA()]
+        pbar = ProgressBar(maxval=100, widgets=widgets).start()
+        while True:
+            fragment = res.read(divsize)
+            downloaded += len(fragment)
+            if not fragment:
+                break
+            result += fragment
+            pbar.update(int(downloaded/divsize))
+        pbar.finish()
+    else:
+        result = res.read()
+
     if cookie_out != None:
         cookiejar.save()
 
-    return res.read()
+    return result
