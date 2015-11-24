@@ -1,26 +1,28 @@
-#pyniconico#
+# pyniconico
 
 ニコニコ動画をpythonから扱うツールです。
 
-##機能##
+## 機能
 
-pyniconicoの主な機能です。
+pyniconicoの実行スクリプト一覧です。
 
- * マイリスト一覧を取得する (getmylist.py)
- * マイリストの動画ID一覧を抜き出す機能 (getmylistsongs.py)
- * 動画をダウンロードする機能 (downloadflv.py)
+ * getmylist.py : マイリスト一覧を取得する 
+ * getmylistsongs.py : マイリストの動画ID一覧を抜き出す 
+ * downloadflv.py : 動画をダウンロードする 
 
-##インストール##
+## インストール
 
-pycurlとargparseが必要です。ない場合はeasy_installやpipでインストールしてください。
+progressbarとeyed3が必要です。ない場合はpipなどでインストールしてください。
 
-##使い方##
+## 使い方
 
-各コマンドの使い方は--helpで参照してください。
+各コマンドの使い方は--helpを参照してください。
 
 ```
-$ python downloadflv.py --help
-usage: downloadflv.py [-h] [-u MAIL] [-p PASSWD] [-o LOCATION] [-f] VID
+$ ./downloadflv.py --help
+usage: downloadflv.py [-h] [-u MAIL] [-p PASSWD] [-l LOCATION] [-f] [--mp3]
+                      [-b BITRATE]
+                      VID
 
 download niconico flv
 
@@ -34,23 +36,26 @@ optional arguments:
   -p PASSWD, --password PASSWD
                         password
   -l LOCATION, --location LOCATION
-                        video output
+                        video output folder
   -f, --force           allow overwrite
-  ```
+  --mp3                 convert to mp3
+  -b BITRATE, --bitrate BITRATE
+                        mp3 bitratesage: downloadflv.py [-h] [-u MAIL] [-p PASSWD] [-o LOCATION] [-f] VID
+ ```
 
-##サンプル##
+## サンプル
 
 例えばtestというマイリストにある動画を全てダウンロードしたい場合は、
 
 ```
 $ for id in `python getmylistsongs.py --raw -n test`
-> do python downloadflv.py $id
+> do ./downloadflv.py $id
 > done
 ```
 
 のような方法で実現できます。
 
-##ログイン##
+## ログイン
 
 ホームディレクトリに.netrcファイル(~/.netrc)を用意することでユーザー名及びパスワード入力を省略することができます。
 
@@ -59,3 +64,4 @@ machine   nicovideo
 login     someone@example.com
 password  testpasswd
 ```
+
