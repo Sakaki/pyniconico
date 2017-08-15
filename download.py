@@ -3,11 +3,13 @@
 
 from urllib import parse
 import os
-from tools import mp3, nico_xml_parser
+from tools import nico_xml_parser
 from tools.nicowalker import NicoWalker
 from mylist_items import GetMyListItems
 from mylist import MyList
 from progressbar import ProgressBar, Percentage, Bar, ETA
+from subprocess import run
+from tools import mp3_tag
 
 character_replace = {
     "\\": "＼",
@@ -124,8 +126,16 @@ class DownloadVideo(NicoWalker):
                 progressbar.update(int(downloaded_size / division_size))
             progressbar.finish()
             print('Saved as {0}'.format(flv_path))
+        # mp3へ変換
         if self.args.mp3conv:
-            mp3.convert(flv_path, self.args.bitrate, video_info["title"], video_info["user_nickname"])
+            mp3_path = "{0}{1}.{2}".format(self.args.location, video_title, "mp3")
+            command = 'ffmpeg -y -i "{0}" -ab {1}k "{2}"'.format(flv_path, self.args.bitrate, mp3_path)
+            run(command, shell=True)
+            mp3_tag.add_tag(mp3_path,
+                            video_info["thumbnail_url"] + ".L",
+                            video_info["title"],
+                            video_info["user_nickname"],
+                            "ニコニコ動画")
         return True
 
 

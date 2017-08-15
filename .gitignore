@@ -66,3 +66,5 @@ __cookie__
 
 # Application temp file
 tools/cookie.json
+*.mp3
+*.mp4
