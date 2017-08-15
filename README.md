@@ -40,7 +40,7 @@ password  testpasswd
 download.pyにはマイリストからまとめて動画をダウンロードする機能が付いています。
 
 ```
-$ python ../repo/pyniconico/download.py -m ボカロ
+$ python download.py -u someone@mail.com -p password -m ボカロ
 【波音リツキレ音源】心做し 【UTAUカバー】 cillia
 Downloading: 100%|#######################################################################################|Time: 0:00:03
 Saved as ./ボカロ5/【波音リツキレ音源】心做し_【UTAUカバー】.mp4
