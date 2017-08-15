@@ -1,7 +1,7 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 
-import mylist
+from mylist import MyList
 from tools.nicowalker import NicoWalker
 import re
 
@@ -20,7 +20,7 @@ class GetMyListItems(NicoWalker):
                                  default=None,
                                  help='mylist name')
         self.set_parser(args)
-        self.mylist_array = mylist.MyList(self.args).invoke()
+        self.mylist_array = MyList.get_mylist_names(self.session)
 
     def invoke(self):
         mylist_names = []
@@ -40,15 +40,16 @@ class GetMyListItems(NicoWalker):
             for mylist_item in mylist_items:
                 print(spacer + mylist_item["item_data"]["watch_id"])
 
-    def get_mylist_items(self, mylist_name):
+    @staticmethod
+    def get_mylist_items(mylist_name, session, mylist_array):
         url = 'http://www.nicovideo.jp/my/mylist'
-        res = self.session.get(url).text
+        res = session.get(url).text
         line = re.search('NicoAPI\.token = "(.*)";', res)
         token = line.group(1)
         params = {'token': token}
 
         mylist_id = ""
-        for mylist in self.mylist_array:
+        for mylist in mylist_array:
             if mylist['name'] == mylist_name:
                 mylist_id = mylist['id']
         if mylist_id != '':
@@ -57,7 +58,7 @@ class GetMyListItems(NicoWalker):
         else:
             url = 'http://www.nicovideo.jp/api/deflist/list'
 
-        res_json = self.session.post(url, data=params).json()
+        res_json = session.post(url, data=params).json()
         if res_json["status"] != "ok":
             print("Error loading mylist(Status is {0})".format(res_json["status"]))
             return []

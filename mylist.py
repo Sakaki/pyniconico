@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 
 from tools import convunichrs
@@ -13,8 +13,12 @@ class MyList(NicoWalker):
         self.set_parser(args)
 
     def invoke(self):
+        return self.get_mylist_names(self.session)
+
+    @staticmethod
+    def get_mylist_names(session):
         url = 'http://www.nicovideo.jp/api/mylistgroup/list'
-        text = self.session.get(url).text
+        text = session.get(url).text
         text = text.split('"')
 
         mylist_items = []

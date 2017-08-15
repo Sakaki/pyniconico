@@ -1,10 +1,12 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 
 from urllib import parse
 import os
 from tools import mp3, nico_xml_parser
 from tools.nicowalker import NicoWalker
+from mylist_items import GetMyListItems
+from mylist import MyList
 from progressbar import ProgressBar, Percentage, Bar, ETA
 
 character_replace = {
@@ -27,7 +29,7 @@ class DownloadVideo(NicoWalker):
         super(DownloadVideo, self).__init__()
         self.parser.add_argument('vid',
                                  metavar='VID',
-                                 help='video id')
+                                 help='watch ID or mylist name')
         self.parser.add_argument('-l', '--location',
                                  dest='location',
                                  default='./',
@@ -44,33 +46,44 @@ class DownloadVideo(NicoWalker):
                                  dest='bitrate',
                                  default=192,
                                  help='mp3 bitrate')
+        self.parser.add_argument('-m', '--mylist',
+                                 dest='mylist',
+                                 action='store_true',
+                                 help='download mylist items')
         self.set_parser(args)
 
     def invoke(self):
-        # 3回失敗するまで繰り返す
-        for _ in range(3):
-            success = self.download()
-            if success:
-                # 成功したら終了
-                break
-            else:
-                # 失敗したらログインしなおす
-                print("Dispose old session and retry.")
-                self.login(force=True)
+        if self.args.mylist:
+            mylist_array = MyList.get_mylist_names(self.session)
+            mylist_items = GetMyListItems.get_mylist_items(self.args.vid, self.session, mylist_array)
+            watch_ids = list(map(lambda mylist_item: mylist_item["item_data"]["watch_id"], mylist_items))
+        else:
+            watch_ids = [self.args.vid]
+        for watch_id in watch_ids:
+            # 3回失敗するまで繰り返す
+            for _ in range(3):
+                success = self.download(watch_id)
+                if success:
+                    # 成功したら終了
+                    break
+                else:
+                    # 失敗したらログインしなおす
+                    print("Dispose old session and retry.")
+                    self.login(force=True)
 
-    def download(self):
+    def download(self, watch_id):
         # 動画の情報をAPIから取得して、視聴ページを訪問
         # （これをやらないとFLVのURLが取れない）
-        api_url = "http://ext.nicovideo.jp/api/getthumbinfo/{0}".format(self.args.vid)
+        api_url = "http://ext.nicovideo.jp/api/getthumbinfo/{0}".format(watch_id)
         api_response_text = self.session.get(api_url).text
         video_info = nico_xml_parser.parse_video_info(api_response_text)
         self.session.get(video_info["watch_url"])
-        url = 'http://www.nicovideo.jp/watch/'+self.args.vid
+        url = 'http://www.nicovideo.jp/watch/{0}'.format(watch_id)
         self.session.get(url)
 
         # ダウンロードURLを取得
         print(video_info["title"], video_info["user_nickname"])
-        url = 'http://flapi.nicovideo.jp/api/getflv?v={0}'.format(self.args.vid)
+        url = 'http://flapi.nicovideo.jp/api/getflv?v={0}'.format(watch_id)
         text = self.session.get(url).text
         flv_url = text.split('&')[2].replace('url=', '')
         flv_url = parse.unquote(flv_url)
