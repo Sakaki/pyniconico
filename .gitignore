@@ -60,3 +60,9 @@ __cookie__
 
 # vim swp file
 *.swp
+
+# PyCharm
+.idea
+
+# Application temp file
+tools/cookie.json

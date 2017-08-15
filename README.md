@@ -6,20 +6,20 @@
 
 pyniconicoの実行スクリプト一覧です。
 
- * getmylist.py : マイリスト一覧を取得する 
- * getmylistsongs.py : マイリストの動画ID一覧を抜き出す 
- * downloadflv.py : 動画をダウンロードする 
+ * download.py : 動画をダウンロードする
+ * mylist.py : マイリスト一覧を取得する
+ * mylist_items.py : マイリストの動画ID一覧を抜き出す
 
 ## インストール
 
-progressbarとeyed3が必要です。ない場合はpipなどでインストールしてください。
+pipでprogressbar2, requests, eyed3, argparseを入れてください。
 
 ## 使い方
 
 各コマンドの使い方は--helpを参照してください。
 
 ```
-$ ./downloadflv.py --help
+$ ./download.py --help
 usage: downloadflv.py [-h] [-u MAIL] [-p PASSWD] [-l LOCATION] [-f] [--mp3]
                       [-b BITRATE]
                       VID
@@ -64,4 +64,3 @@ machine   nicovideo
 login     someone@example.com
 password  testpasswd
 ```
-
