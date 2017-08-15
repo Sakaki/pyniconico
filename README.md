@@ -2,9 +2,9 @@
 
 ニコニコ動画をpythonから扱うツールです。
 
-## 機能
+サーバーに負荷をかけない常識の範囲内でお使いください。
 
-pyniconicoの実行スクリプト一覧です。
+## 機能
 
  * download.py : 動画をダウンロードする
  * mylist.py : マイリスト一覧を取得する
@@ -12,55 +12,44 @@ pyniconicoの実行スクリプト一覧です。
 
 ## インストール
 
+Python 3で動作します（Python 3.5.2で動作を確認）。
+
 pipでprogressbar2, requests, eyed3, argparseを入れてください。
 
 ## 使い方
 
-各コマンドの使い方は--helpを参照してください。
-
 ```
-$ ./download.py --help
-usage: downloadflv.py [-h] [-u MAIL] [-p PASSWD] [-l LOCATION] [-f] [--mp3]
-                      [-b BITRATE]
-                      VID
-
-download niconico flv
-
-positional arguments:
-  VID                   video id
-
-optional arguments:
-  -h, --help            show this help message and exit
-  -u MAIL, --username MAIL
-                        username
-  -p PASSWD, --password PASSWD
-                        password
-  -l LOCATION, --location LOCATION
-                        video output folder
-  -f, --force           allow overwrite
-  --mp3                 convert to mp3
-  -b BITRATE, --bitrate BITRATE
-                        mp3 bitratesage: downloadflv.py [-h] [-u MAIL] [-p PASSWD] [-o LOCATION] [-f] VID
+$ python download.py -u someone@mail.com -p password sm31606995
+ハチ MV「砂の惑星 feat.初音ミク」 ハチ
+Downloading: 100%|#######################################################################################|Time: 0:00:09
+Saved as ./ハチ_MV「砂の惑星_feat.初音ミク」.mp4
 ```
-
-## サンプル
-
-例えばtestというマイリストにある動画を全てダウンロードしたい場合は、
-
-```
-$ for id in `python getmylistsongs.py --raw -n test`
-> do python downloadflv.py $id
-> done
-```
-
-のような方法で実現できます。
 
 ## ログイン
 
-ホームディレクトリに.netrcファイル(~/.netrc)を用意することでユーザー名及びパスワード入力を省略することができます。
+ホームディレクトリに以下のような.netrcファイル(~/.netrc)を用意することで、ユーザー名及びパスワード入力を省略することができます。
 
 ```
 machine   nicovideo
-login     someone@example.com
+login     someone@mail.com
 password  testpasswd
 ```
+
+## まとめてダウンロード
+
+download.pyにはマイリストからまとめて動画をダウンロードする機能が付いています。
+
+```
+$ python ../repo/pyniconico/download.py -m ボカロ
+【波音リツキレ音源】心做し 【UTAUカバー】 cillia
+Downloading: 100%|#######################################################################################|Time: 0:00:03
+Saved as ./ボカロ5/【波音リツキレ音源】心做し_【UTAUカバー】.mp4
+【初音ミク】 声 【オリジナルPV】 はりー
+Downloading: 100%|#######################################################################################|Time: 0:00:16
+Saved as ./ボカロ5/【初音ミク】_声_【オリジナルPV】.mp4
+【初音ミク】 Initial Song 【オリジナルMV】 40mP
+Downloading: 100%|#######################################################################################|Time: 0:00:14
+Saved as ./ボカロ5/【初音ミク】_Initial_Song_【オリジナルMV】.mp4
+```
+
+そのほかの機能は各ファイルの--helpを参照してください。
