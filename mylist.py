@@ -13,7 +13,8 @@ class MyList(NicoWalker):
         self.set_parser(args)
 
     def invoke(self):
-        return self.get_mylist_names(self.session)
+        for item in self.get_mylist_names(self.session):
+            print(item['name'], item['id'])
 
     @staticmethod
     def get_mylist_names(session):
@@ -40,8 +41,4 @@ class MyList(NicoWalker):
 
 
 if __name__ == '__main__':
-    cookie = 'cookie'
-    lst = MyList(None).invoke()
-
-    for item in lst:
-        print(item['name'], item['id'])
+    MyList(None).invoke()

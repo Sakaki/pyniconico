@@ -34,7 +34,7 @@ class DownloadVideo(NicoWalker):
                                  help='watch ID or mylist name')
         self.parser.add_argument('-l', '--location',
                                  dest='location',
-                                 default='./',
+                                 default='./'.replace("/", os.sep),
                                  help='video output folder')
         self.parser.add_argument('-f', '--force',
                                  dest='overwrite',
@@ -64,7 +64,8 @@ class DownloadVideo(NicoWalker):
         for watch_id in watch_ids:
             # 3回失敗するまで繰り返す
             for _ in range(3):
-                success = self.download(watch_id)
+                success = self.download(self.session, watch_id, self.args.location, self.args.overwrite,
+                                        self.args.mp3conv, self.args.bitrate)
                 if success:
                     # 成功したら終了
                     break
@@ -73,40 +74,42 @@ class DownloadVideo(NicoWalker):
                     print("Dispose old session and retry.")
                     self.login(force=True)
 
-    def download(self, watch_id):
+    @staticmethod
+    def download(session, watch_id, save_directory, overwrite=False, convert_mp3=False, mp3_bitrate="192"):
         # 動画の情報をAPIから取得して、視聴ページを訪問
         # （これをやらないとFLVのURLが取れない）
         api_url = "http://ext.nicovideo.jp/api/getthumbinfo/{0}".format(watch_id)
-        api_response_text = self.session.get(api_url).text
+        api_response_text = session.get(api_url).text
         video_info = nico_xml_parser.parse_video_info(api_response_text)
-        self.session.get(video_info["watch_url"])
+        session.get(video_info["watch_url"])
         url = 'http://www.nicovideo.jp/watch/{0}'.format(watch_id)
-        self.session.get(url)
+        session.get(url)
 
         # ダウンロードURLを取得
         print(video_info["title"], video_info["user_nickname"])
         url = 'http://flapi.nicovideo.jp/api/getflv?v={0}'.format(watch_id)
-        text = self.session.get(url).text
+        text = session.get(url).text
         flv_url = text.split('&')[2].replace('url=', '')
         flv_url = parse.unquote(flv_url)
 
         # FLV保存のためのファイル名を決定
-        if not self.args.location.endswith('/'):
-            self.args.location += '/'
+        if not save_directory.endswith('/'):
+            save_directory += '/'
         # ファイル名に使用不可能の文字列は大文字に置き換える
         video_title = video_info["title"]
         for key, value in character_replace.items():
             if key in video_title:
                 video_title = video_title.replace(key, value)
-        flv_path = "{0}{1}.{2}".format(self.args.location, video_title, video_info["movie_type"])
-        if not self.args.overwrite and os.path.exists(flv_path):
+        flv_path = "{0}{1}.{2}".format(save_directory, video_title, video_info["movie_type"])
+        flv_path = flv_path.replace("/", os.sep)
+        if not overwrite and os.path.exists(flv_path):
             print("File exists. Skipping...")
             return True
 
         # ダウンロード＆保存処理開始
         with open(flv_path, 'wb') as f:
             # FLVのURLに対してセッションを開く
-            res = self.session.get(flv_url, stream=True)
+            res = session.get(flv_url, stream=True)
             if res.status_code != 200:
                 print("Download failed. Status code is {0}.".format(res.status_code))
                 return False
@@ -127,9 +130,10 @@ class DownloadVideo(NicoWalker):
             progressbar.finish()
             print('Saved as {0}'.format(flv_path))
         # mp3へ変換
-        if self.args.mp3conv:
-            mp3_path = "{0}{1}.{2}".format(self.args.location, video_title, "mp3")
-            command = 'ffmpeg -y -i "{0}" -ab {1}k "{2}"'.format(flv_path, self.args.bitrate, mp3_path)
+        if convert_mp3:
+            mp3_path = "{0}{1}.{2}".format(save_directory, video_title, "mp3")
+            mp3_path = mp3_path.replace("/", os.sep)
+            command = 'ffmpeg -y -i "{0}" -ab {1}k "{2}"'.format(flv_path, mp3_bitrate, mp3_path)
             run(command, shell=True)
             mp3_tag.add_tag(mp3_path,
                             video_info["thumbnail_url"] + ".L",
