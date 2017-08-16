@@ -10,11 +10,21 @@
  * mylist.py : マイリスト一覧を取得する
  * mylist_items.py : マイリストの動画ID一覧を抜き出す
 
+## 動作環境
+
+OS: Linux, MacOS, Windows (Windowsではnetrcが動きません)
+
+アーキテクチャ: モジュールが入ればどれでも
+
 ## インストール
 
 Python 3で動作します（Python 3.5.2で動作を確認）。
 
-pipなどでprogressbar2, requests, argparse, pillow, mutagenを入れてください。
+モジュールのインストールはrequirements.txtを使ってください。
+
+```
+$ pip install -r requirements.txt
+```
 
 ## 使い方
 
@@ -61,7 +71,7 @@ ffmpegが入っていればその場でmp3に変換することもできます�
 その際、タグやカバーアートは自動で入ります。
 
 ```
-$ python download.py --mp3 sm31606995
+$ python download.py -u someone@mail.com -p password --mp3 sm31606995
 ハチ MV「砂の惑星 feat.初音ミク」 ハチ
 ...
 $ eyeD3 ハチ_MV「砂の惑星_feat.初音ミク」.mp3
