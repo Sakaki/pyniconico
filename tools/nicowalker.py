@@ -6,9 +6,11 @@ from os import path
 import requests
 import pickle
 import netrc
+import os
 
 working_dir = path.dirname(path.abspath(__file__))
 cookie_path = "{0}/{1}".format(working_dir, "cookie.json")
+cookie_path = cookie_path.replace("/", os.sep)
 
 
 class NicoWalker(object):
