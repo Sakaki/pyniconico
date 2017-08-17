@@ -29,21 +29,29 @@ class NicoWalker(object):
         self.mail = None
         self.password = None
         self.args = None
-        self.session = None
+        self.session = requests.Session()
 
     def set_parser(self, args=None):
         if args is None:
             args = self.parser.parse_args()
         self.args = args
+        # セッションが保存されていた場合、それを使う
+        if path.exists(cookie_path):
+            self.load_cookies()
+            # ログインできていたらリターン
+            if self.is_logged_in():
+                return
         mail = args.mail
         password = args.passwd
 
         # ユーザー名とパスワードをnetrcから取得
         if mail is None or password is None:
-            # mail, password = login_nicovideo.get_login_info()
-            auth = netrc.netrc()
-            mail, _, password = auth.authenticators("nicovideo")
-
+            try:
+                auth = netrc.netrc()
+                mail, _, password = auth.authenticators("nicovideo")
+            except OSError as e:
+                print(e)
+                raise LoginFailedException("ログインに失敗しました")
         # ログインしてセッションを取得
         self.mail = mail
         self.password = password
@@ -57,7 +65,6 @@ class NicoWalker(object):
             'next_url': '',
             'site': "niconico"
         }
-        self.session = requests.Session()
         # セッションが保存されていた場合、それを使う
         if path.exists(cookie_path) and not force:
             self.load_cookies()
@@ -68,6 +75,8 @@ class NicoWalker(object):
         if self.is_logged_in():
             # クッキーを保存
             self.save_cookies()
+        else:
+            raise LoginFailedException("ログインに失敗しました")
 
     def load_cookies(self):
         with open(cookie_path, "rb") as f:
@@ -84,7 +93,11 @@ class NicoWalker(object):
         url = 'http://www.nicovideo.jp/api/deflist/list'
         res = self.session.get(url)
         res_json = json.loads(res.text)
-        if res_json["status"] == "fail":
-            return False
-        else:
+        if res_json["status"] == "ok":
             return True
+        else:
+            return False
+
+
+class LoginFailedException(Exception):
+    pass

@@ -1,0 +1,85 @@
+#:kivy 1.1.0
+
+Root:
+    BoxLayout:
+        orientation: 'vertical'
+
+        BoxLayout:
+            size_hint_y: 3
+            BoxLayout:
+                orientation: 'vertical'
+                size_hint_x: 3
+                BoxLayout:
+                    orientation: 'vertical'
+                    Label:
+                        text: "URL・動画ID"
+                    TextInput:
+                        id: input_watch_id
+                        text: ""
+                        multiline: False
+
+                BoxLayout:
+                    BoxLayout:
+                        orientation: 'vertical'
+                        Label:
+                            text: "ユーザー名"
+                        TextInput:
+                            id: input_user_id
+                            text: ""
+                            multiline: False
+
+                    BoxLayout:
+                        orientation: 'vertical'
+                        Label:
+                            text: "パスワード"
+                        TextInput:
+                            id: input_password
+                            text: ""
+                            multiline: False
+                            password: True
+
+                BoxLayout:
+                    orientation: 'vertical'
+                    Label:
+                        text: "保存ディレクトリ"
+                    BoxLayout:
+                        Button:
+                            id: button_dir_picker
+                            text: "選択"
+                            on_release: root.show_choose_dir()
+                        Label:
+                            text: root.download_dir
+
+            Button:
+                size_hint_y: 1
+                id: button_download
+                text: "ダウンロード"
+                on_release: root.start_download()
+
+        Label:
+            size_hint_y: 1
+            text: root.status_text
+        ProgressBar:
+            size_hint_y: 1
+            value: root.progress
+            max: 100
+
+<ChooseDirectoryDialog>:
+    BoxLayout:
+        size: root.size
+        pos: root.pos
+        orientation: "vertical"
+        FileChooserIconView:
+            id: filechooser
+            path: "./"
+            dirselect: True
+        BoxLayout:
+            size_hint_y: None
+            height: 30
+            Button:
+                text: "Cancel"
+                on_release: root.cancel()
+
+            Button:
+                text: "Load"
+                on_release: root.set_path(filechooser.path)
