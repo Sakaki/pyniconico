@@ -19,7 +19,7 @@ OS: Linux, MacOS, Windows (Windowsではnetrcが動きません)
 
 ## インストール
 
-Python 3で動作します（Python 3.5.2で動作を確認）。
+Python 3で動作します（Python 3.4.4で動作を確認）。
 
 モジュールのインストールはrequirements.txtを使ってください。
 
@@ -43,12 +43,12 @@ Saved as ./ハチ_MV「砂の惑星_feat.初音ミク」.mp4
 ![nicovideo_dl](https://user-images.githubusercontent.com/980141/29416522-5452b716-83a1-11e7-9372-379a0f72bb9e.png)
 
 ```
-python gui.py
+$ python gui.py
 ```
 
 で起動します。初回はユーザー名、パスワード、URLまたは動画IDをすべて入力する必要があります。
 
-2回目以降は取得したクッキーを用いてログインを試み、成功した場合はユーザー名やパスワードの入力なしでもダウンロードができます。
+2回目以降はクッキーを用いてログインを試み、成功した場合はユーザー名やパスワードの入力なしでもダウンロードができます。
 
 ## ログイン
 
