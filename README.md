@@ -9,6 +9,7 @@
  * download.py : 動画をダウンロードする
  * mylist.py : マイリスト一覧を取得する
  * mylist_items.py : マイリストの動画ID一覧を抜き出す
+ * gui.py : 簡易的なGUIインターフェースです
 
 ## 動作環境
 
@@ -28,12 +29,26 @@ $ pip install -r requirements.txt
 
 ## 使い方
 
+### CLI (nicovideo_dl.py)
+
 ```
-$ python download.py -u someone@mail.com -p password sm31606995
+$ python nicovideo_dl.py -u someone@mail.com -p password sm31606995
 ハチ MV「砂の惑星 feat.初音ミク」 ハチ
 Downloading: 100%|#######################################################################################|Time: 0:00:09
 Saved as ./ハチ_MV「砂の惑星_feat.初音ミク」.mp4
 ```
+
+### GUI (gui.py)
+
+![nicovideo_dl](https://user-images.githubusercontent.com/980141/29416522-5452b716-83a1-11e7-9372-379a0f72bb9e.png)
+
+```
+python gui.py
+```
+
+で起動します。初回はユーザー名、パスワード、URLまたは動画IDをすべて入力する必要があります。
+
+2回目以降は取得したクッキーを用いてログインを試み、成功した場合はユーザー名やパスワードの入力なしでもダウンロードができます。
 
 ## ログイン
 
@@ -50,7 +65,7 @@ password  testpasswd
 download.pyにはマイリストからまとめて動画をダウンロードする機能が付いています。
 
 ```
-$ python download.py -u someone@mail.com -p password -m ボカロ
+$ python nicovideo_dl.py -u someone@mail.com -p password -m ボカロ
 【波音リツキレ音源】心做し 【UTAUカバー】 cillia
 Downloading: 100%|#######################################################################################|Time: 0:00:03
 Saved as ./【波音リツキレ音源】心做し_【UTAUカバー】.mp4
@@ -71,7 +86,7 @@ ffmpegが入っていればその場でmp3に変換することもできます�
 その際、タグやカバーアートは自動で入ります。
 
 ```
-$ python download.py -u someone@mail.com -p password --mp3 sm31606995
+$ python nicovideo_dl.py -u someone@mail.com -p password --mp3 sm31606995
 ハチ MV「砂の惑星 feat.初音ミク」 ハチ
 ...
 $ eyeD3 ハチ_MV「砂の惑星_feat.初音ミク」.mp3
