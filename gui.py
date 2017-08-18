@@ -26,6 +26,19 @@ class ChooseDirectoryDialog(FloatLayout):
     cancel = ObjectProperty(None)
 
 
+class LoginDialog(FloatLayout):
+    start_login = ObjectProperty(None)
+    label_login_status = StringProperty()
+
+    def __init__(self, message, **kwargs):
+        super().__init__(**kwargs)
+        self.label_login_status = message
+
+
+class LoginProgressDialog(FloatLayout):
+    pass
+
+
 class Root(FloatLayout):
     download_dir = StringProperty()
     progress = NumericProperty()
@@ -34,22 +47,46 @@ class Root(FloatLayout):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.popup = None
+        self.login_dialog = None
         self.download_dir = path.dirname(path.abspath(__file__))
         self.progress = 0
         self.video_title = ""
+        self.download_video = None
+
+    def start_login(self, mail, passwd, init=False):
+        if not init:
+            self.login_dialog.label_login_status = "ログインしています・・・"
+        Thread(target=self.login, args=(mail, passwd, init, )).start()
+
+    def login(self, mail, passwd, init=False):
+        if self.login_dialog is not None and isinstance(self.login_dialog, Popup):
+            self.login_dialog.dismiss()
+        content = LoginProgressDialog()
+        progress_dialog = Popup(title="ログイン", content=content, size_hint=(0.3, 0.3))
+        progress_dialog.open()
 
         class Args:
             pass
         args = Args()
-        args.mail = None
-        args.passwd = None
+        if mail == "":
+            mail = None
+        if passwd == "":
+            passwd = None
+        args.mail = mail
+        args.passwd = passwd
         try:
             self.download_video = DownloadVideo(args)
-            status_text = "ログインに成功しました。ユーザー名とパスワードは入力不要です。"
+            self.status_text = "ログインに成功しました"
         except LoginFailedException:
-            self.download_video = None
-            status_text = "ユーザー名とパスワードを入力してください"
-        self.status_text = status_text
+            if init:
+                message = "ユーザー名とパスワードを入力してください"
+            else:
+                message = "ログインに失敗しました"
+            login_dialog = LoginDialog(message, start_login=self.start_login)
+            self.login_dialog = Popup(title="ログイン", content=login_dialog, size_hint=(0.8, 0.9))
+            self.login_dialog.open()
+        finally:
+            progress_dialog.dismiss()
 
     def set_path(self, dir_path):
         self.download_dir = dir_path
@@ -84,24 +121,13 @@ class Root(FloatLayout):
             return
         if watch_id.startswith("http"):
             watch_id = watch_id.split("/")[-1]
-        if "?" in watch_id:
-            watch_id = watch_id.split["?"][0]
-        if self.ids.input_user_id.text != "":
-            user_id = self.ids.input_user_id.text
-        else:
-            user_id = None
-        if self.ids.input_password.text != "":
-            password = self.ids.input_password.text
-        else:
-            password = None
 
         class Args:
             pass
         args = Args()
         args.vid = watch_id
         args.location = self.download_dir
-        args.mail = user_id
-        args.passwd = password
+        
         if self.download_video is None:
             try:
                 self.download_video = DownloadVideo(args)
@@ -126,11 +152,20 @@ class Root(FloatLayout):
 
 
 class NicoVideoDLApp(App):
-    pass
+    def on_start(self):
+        self.root.start_login(None, None, init=True)
+
+    def build_config(self, config):
+        config.read("nicovideo_dl.ini")
+
+    def build_settings(self, settings):
+        settings.add_json_panel('Download Settings', self.config, filename='settings.json')
+
 
 if __name__ == '__main__':
     Config.set('graphics', 'width', '700')
     Config.set('graphics', 'height', '350')
     Factory.register('Root', cls=Root)
     Factory.register('ChooseDirectoryDialog', cls=ChooseDirectoryDialog)
+    Factory.register("LoginDialog", cls=LoginDialog)
     NicoVideoDLApp().run()

@@ -3,12 +3,14 @@
 Root:
     BoxLayout:
         orientation: 'vertical'
+        padding: 5
 
         BoxLayout:
             size_hint_y: 3
             BoxLayout:
                 orientation: 'vertical'
                 size_hint_x: 3
+                padding: 5
                 BoxLayout:
                     orientation: 'vertical'
                     Label:
@@ -18,25 +20,25 @@ Root:
                         text: ""
                         multiline: False
 
-                BoxLayout:
-                    BoxLayout:
-                        orientation: 'vertical'
-                        Label:
-                            text: "ユーザー名"
-                        TextInput:
-                            id: input_user_id
-                            text: ""
-                            multiline: False
-
-                    BoxLayout:
-                        orientation: 'vertical'
-                        Label:
-                            text: "パスワード"
-                        TextInput:
-                            id: input_password
-                            text: ""
-                            multiline: False
-                            password: True
+#                BoxLayout:
+#                    BoxLayout:
+#                        orientation: 'vertical'
+#                        Label:
+#                            text: "ユーザー名"
+#                        TextInput:
+#                            id: input_user_id
+#                            text: ""
+#                            multiline: False
+#
+#                    BoxLayout:
+#                        orientation: 'vertical'
+#                        Label:
+#                            text: "パスワード"
+#                        TextInput:
+#                            id: input_password
+#                            text: ""
+#                            multiline: False
+#                            password: True
 
                 BoxLayout:
                     orientation: 'vertical'
@@ -44,10 +46,12 @@ Root:
                         text: "保存ディレクトリ"
                     BoxLayout:
                         Button:
+                            size_hint_x: 1
                             id: button_dir_picker
                             text: "選択"
                             on_release: root.show_choose_dir()
                         Label:
+                            size_hint_x: 2
                             text: root.download_dir
 
             Button:
@@ -83,3 +87,54 @@ Root:
             Button:
                 text: "Load"
                 on_release: root.set_path(filechooser.path)
+
+<LoginDialog>:
+    BoxLayout:
+        size: root.size
+        pos: root.pos
+        orientation: "vertical"
+        padding: 5
+
+        BoxLayout:
+            size_hint_y: 2
+            orientation: 'vertical'
+            BoxLayout:
+                padding: 10
+                Label:
+                    size_hint_x: 1
+                    text: "ユーザー名"
+                TextInput:
+                    size_hint_x: 2
+                    id: input_user_id
+                    text: ""
+                    multiline: False
+
+            BoxLayout:
+                padding: 10
+                Label:
+                    size_hint_x: 1
+                    text: "パスワード"
+                TextInput:
+                    size_hint_x: 2
+                    id: input_password
+                    text: ""
+                    multiline: False
+                    password: True
+
+        Label:
+            size_hint_y: 1
+            text: root.label_login_status
+
+        Button:
+            size_hint_y: 1
+            text: "ログイン"
+            on_release: root.start_login(input_user_id.text, input_password.text)
+
+<LoginProgressDialog>
+    BoxLayout:
+        size: root.size
+        pos: root.pos
+        orientation: "vertical"
+
+        Label:
+            text: "ログインしています・・・"

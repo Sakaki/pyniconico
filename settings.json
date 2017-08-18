@@ -1,0 +1,23 @@
+[
+  {
+    "type": "bool",
+    "title": "MP3変換",
+    "desc": "動画ダウンロード時にmp3ファイルに変換を行います",
+    "section": "general",
+    "key": "mp3conv"
+  },
+  {
+    "type": "numeric",
+    "title": "mp3ビットレート(kbps)",
+    "desc": "mp3変換時のビットレートをkbpsで指定します",
+    "section": "general",
+    "key": "bitrate"
+  },
+  {
+    "type": "bool",
+    "title": "ファイルの上書き",
+    "desc": "ダウンロード時に上書きを行います",
+    "section": "general",
+    "key": "overwrite"
+  }
+]
