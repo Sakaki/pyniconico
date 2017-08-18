@@ -53,6 +53,13 @@ class Root(FloatLayout):
         self.video_title = ""
         self.download_video = None
 
+        class Args:
+            pass
+        self.configs = Args()
+
+    def open_settings(self):
+        App.open_settings()
+
     def start_login(self, mail, passwd, init=False):
         if not init:
             self.login_dialog.label_login_status = "ログインしています・・・"
@@ -64,18 +71,14 @@ class Root(FloatLayout):
         content = LoginProgressDialog()
         progress_dialog = Popup(title="ログイン", content=content, size_hint=(0.3, 0.3))
         progress_dialog.open()
-
-        class Args:
-            pass
-        args = Args()
         if mail == "":
             mail = None
         if passwd == "":
             passwd = None
-        args.mail = mail
-        args.passwd = passwd
+        self.configs.mail = mail
+        self.configs.passwd = passwd
         try:
-            self.download_video = DownloadVideo(args)
+            self.download_video = DownloadVideo(self.configs)
             self.status_text = "ログインに成功しました"
         except LoginFailedException:
             if init:
@@ -127,7 +130,7 @@ class Root(FloatLayout):
         args = Args()
         args.vid = watch_id
         args.location = self.download_dir
-        
+
         if self.download_video is None:
             try:
                 self.download_video = DownloadVideo(args)
@@ -154,12 +157,18 @@ class Root(FloatLayout):
 class NicoVideoDLApp(App):
     def on_start(self):
         self.root.start_login(None, None, init=True)
+        self.root.ids.button_settings.bind(on_release=self.open_settings)
+        for key in ["mp3conv", "bitrate", "overwrite"]:
+            setattr(self.root.configs, key, self.config.get("general", key))
 
     def build_config(self, config):
         config.read("nicovideo_dl.ini")
 
     def build_settings(self, settings):
         settings.add_json_panel('Download Settings', self.config, filename='settings.json')
+
+    def on_config_change(self, config, section, key, value):
+        setattr(self.root.download_video.args, key, value)
 
 
 if __name__ == '__main__':

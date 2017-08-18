@@ -2,7 +2,7 @@
   {
     "type": "bool",
     "title": "MP3変換",
-    "desc": "動画ダウンロード時にmp3ファイルに変換を行います",
+    "desc": "動画ダウンロード時にmp3ファイルに変換を行います(ffmpegが必要です)",
     "section": "general",
     "key": "mp3conv"
   },

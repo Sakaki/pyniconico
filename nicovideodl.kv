@@ -20,26 +20,6 @@ Root:
                         text: ""
                         multiline: False
 
-#                BoxLayout:
-#                    BoxLayout:
-#                        orientation: 'vertical'
-#                        Label:
-#                            text: "ユーザー名"
-#                        TextInput:
-#                            id: input_user_id
-#                            text: ""
-#                            multiline: False
-#
-#                    BoxLayout:
-#                        orientation: 'vertical'
-#                        Label:
-#                            text: "パスワード"
-#                        TextInput:
-#                            id: input_password
-#                            text: ""
-#                            multiline: False
-#                            password: True
-
                 BoxLayout:
                     orientation: 'vertical'
                     Label:
@@ -54,11 +34,17 @@ Root:
                             size_hint_x: 2
                             text: root.download_dir
 
-            Button:
+            BoxLayout:
+                orientation: "vertical"
                 size_hint_y: 1
-                id: button_download
-                text: "ダウンロード"
-                on_release: root.start_download()
+                padding: 5
+                Button:
+                    id: button_settings
+                    text: "設定"
+                Button:
+                    id: button_download
+                    text: "ダウンロード"
+                    on_release: root.start_download()
 
         Label:
             size_hint_y: 1
