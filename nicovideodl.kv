@@ -1,4 +1,8 @@
-#:kivy 1.1.0
+# -*- coding:Shift_JIS -*-
+
+#:import label kivy.uix.label
+#:import sla kivy.adapters.simplelistadapter
+#:import listview kivy.uix.listview
 
 Root:
     BoxLayout:
@@ -19,6 +23,20 @@ Root:
                         id: input_watch_id
                         text: ""
                         multiline: False
+
+                BoxLayout:
+                    orientation: 'vertical'
+                    Label:
+                        text: "マイリスト一括ダウンロード"
+                    BoxLayout:
+                        Button:
+                            size_hint_x: 1
+                            text: "選択"
+                            on_release: root.show_choose_mylist()
+                        Label:
+                            id: label_mylist_name
+                            size_hint_x: 2
+                            text: root.mylist_selected
 
                 BoxLayout:
                     orientation: 'vertical'
@@ -73,6 +91,13 @@ Root:
             Button:
                 text: "Load"
                 on_release: root.set_path(filechooser.path)
+
+<ListViewModal>:
+    size_hint: None,None
+    size: 400,400
+    ListView:
+        id: listview_mylist_items
+        size_hint: .8,.8
 
 <LoginDialog>:
     BoxLayout:

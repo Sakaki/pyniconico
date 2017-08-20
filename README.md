@@ -6,10 +6,10 @@
 
 ## 機能
 
- * download.py : 動画をダウンロードする
+ * nicovideo_dl.py : 動画をダウンロードする
+ * gui.py : GUIインターフェース
  * mylist.py : マイリスト一覧を取得する
  * mylist_items.py : マイリストの動画ID一覧を抜き出す
- * gui.py : 簡易的なGUIインターフェースです
 
 ## 動作環境
 
@@ -40,7 +40,7 @@ Saved as ./ハチ_MV「砂の惑星_feat.初音ミク」.mp4
 
 ### GUI (gui.py)
 
-![nicovideo_dl](https://user-images.githubusercontent.com/980141/29416522-5452b716-83a1-11e7-9372-379a0f72bb9e.png)
+![nicovideo_dl](https://user-images.githubusercontent.com/980141/29494124-72a2b4d4-85de-11e7-894d-9112dbac6e03.png)
 
 ```
 $ python gui.py
@@ -64,6 +64,8 @@ password  testpasswd
 
 download.pyにはマイリストからまとめて動画をダウンロードする機能が付いています。
 
+### CLI
+
 ```
 $ python nicovideo_dl.py -u someone@mail.com -p password -m ボカロ
 【波音リツキレ音源】心做し 【UTAUカバー】 cillia
@@ -79,11 +81,19 @@ Saved as ./【初音ミク】_Initial_Song_【オリジナルMV】.mp4
 
 そのほかの機能は各ファイルの--helpを参照してください。
 
+### GUI
+
+マイリスト一括ダウンロードの「選択」ボタンを押してください。
+
+![nicovideo_dl_mylist](https://user-images.githubusercontent.com/980141/29494138-a967c586-85de-11e7-91f5-d125775ae09e.png)
+
 ## mp3への変換
 
 ffmpegが入っていればその場でmp3に変換することもできます。
 
 その際、タグやカバーアートは自動で入ります。
+
+### CLI
 
 ```
 $ python nicovideo_dl.py -u someone@mail.com -p password --mp3 sm31606995
@@ -111,3 +121,9 @@ Description: Cover
 
 -------------------------------------------------------------------------------
 ```
+
+### GUI
+
+設定ボタンからmp3変換を有効にし、ビットレートを調整してください。
+
+![nicovideo_dl_settings](https://user-images.githubusercontent.com/980141/29494148-d805f75a-85de-11e7-8cfd-02e5635f4025.png)
