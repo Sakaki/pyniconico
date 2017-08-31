@@ -14,29 +14,34 @@ def add_tag(file_path, thumbnail_url, title, artist, album):
     retry = 3
     while retry >= 0:
         try:
-            coverart_page = requests.get(thumbnail_url)
+            thumbnail_url_large = thumbnail_url + ".L"
+            coverart_page = requests.get(thumbnail_url_large)
             if coverart_page.status_code == 404:
-                coverart_page= requests.get(thumbnail_url)
-            jpeg_file = BytesIO(coverart_page.content)
-            image_processor = Image.open(jpeg_file)
-            size = image_processor.size
-            smaller, larger = size if size[0] < size[1] else size[::-1]
-            box = ((larger-smaller)/2, 0, (larger-smaller)/2+smaller, smaller)
-            cropped = image_processor.crop(box)
-            temp = BytesIO()
-            cropped.save(temp, format="JPEG")
-            temp.seek(0)
-            coverart = temp.read()
-            tags["APIC:"] = APIC(
-                encoding=3,
-                mime='image/jpeg',
-                type=3,
-                desc='Cover',
-                data=coverart
-            )
-            tags["TIT2"] = TIT2(encoding=3, text=title)
-            tags["TPE1"] = TPE1(encoding=3, text=artist)
-            tags["TALB"] = TALB(encoding=3, text=album)
+                coverart_page = requests.get(thumbnail_url)
+            if coverart_page.status_code != 404:
+                jpeg_file = BytesIO(coverart_page.content)
+                image_processor = Image.open(jpeg_file)
+                size = image_processor.size
+                smaller, larger = size if size[0] < size[1] else size[::-1]
+                box = ((larger-smaller)/2, 0, (larger-smaller)/2+smaller, smaller)
+                cropped = image_processor.crop(box)
+                temp = BytesIO()
+                cropped.save(temp, format="JPEG")
+                temp.seek(0)
+                coverart = temp.read()
+                tags["APIC:"] = APIC(
+                    encoding=3,
+                    mime='image/jpeg',
+                    type=3,
+                    desc='Cover',
+                    data=coverart
+                )
+            if title is not None:
+                tags["TIT2"] = TIT2(encoding=3, text=title)
+            if artist is not None:
+                tags["TPE1"] = TPE1(encoding=3, text=artist)
+            if album is not None:
+                tags["TALB"] = TALB(encoding=3, text=album)
             break
         except requests.ConnectionError as e:
             print(e)
