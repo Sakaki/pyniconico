@@ -67,8 +67,12 @@ class NicoWalker(object):
             if self.is_logged_in():
                 return
         login_page_url = "https://account.nicovideo.jp/login"
+        if os.name == 'nt':
+            phantomjs_path = "node_modules/phantomjs/lib/phantom/bin/phantomjs.exe"
+        else:
+            phantomjs_path = "node_modules/phantomjs/bin/phantomjs"
         try:
-            driver = webdriver.PhantomJS("node_modules/phantomjs/lib/phantom/bin/phantomjs.exe")
+            driver = webdriver.PhantomJS(phantomjs_path)
         except FileNotFoundError:
             raise LoginFailedException("ログインに失敗しました")
         driver.get(login_page_url)
