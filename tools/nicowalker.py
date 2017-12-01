@@ -7,6 +7,8 @@ import requests
 import pickle
 import netrc
 import os
+from selenium import webdriver
+from bs4 import BeautifulSoup
 
 working_dir = path.dirname(path.abspath(__file__))
 cookie_path = "{0}/{1}".format(working_dir, "cookie.json")
@@ -58,20 +60,29 @@ class NicoWalker(object):
         self.login()
 
     def login(self, force=False):
-        url = "https://secure.nicovideo.jp/secure/login"
-        params = {
-            'mail': self.mail,
-            'password': self.password,
-            'next_url': '',
-            'site': "niconico"
-        }
         # セッションが保存されていた場合、それを使う
         if path.exists(cookie_path) and not force:
             self.load_cookies()
             # ログインできていたらリターン
             if self.is_logged_in():
                 return
-        self.session.post(url, data=params)
+        login_page_url = "https://account.nicovideo.jp/login"
+        try:
+            driver = webdriver.PhantomJS("node_modules/phantomjs/lib/phantom/bin/phantomjs.exe")
+        except FileNotFoundError:
+            raise LoginFailedException("ログインに失敗しました")
+        driver.get(login_page_url)
+        mail = driver.find_element_by_id('input__mailtel')
+        password = driver.find_element_by_id('input__password')
+        submit = driver.find_element_by_id("login__submit")
+        mail.send_keys(self.mail)
+        password.send_keys(self.password)
+        submit.submit()
+        mylist_url = "http://www.nicovideo.jp/api/deflist/list"
+        driver.get(mylist_url)
+        # cookieを保存
+        for cookie in driver.get_cookies():
+            self.session.cookies.set(cookie['name'], cookie['value'])
         if self.is_logged_in():
             # クッキーを保存
             self.save_cookies()

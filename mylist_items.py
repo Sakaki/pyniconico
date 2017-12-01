@@ -36,7 +36,7 @@ class GetMyListItems(NicoWalker):
                 print(mylist_name + ':')
                 spacer = '  '
 
-            mylist_items = self.get_mylist_items(mylist_name)
+            mylist_items = self.get_mylist_items(mylist_name, self.session, self.mylist_array)
             for mylist_item in mylist_items:
                 print(spacer + mylist_item["item_data"]["watch_id"])
 

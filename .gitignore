@@ -68,3 +68,7 @@ __cookie__
 tools/cookie.json
 *.mp3
 *.mp4
+*.flv
+
+# node modules
+node_modules
