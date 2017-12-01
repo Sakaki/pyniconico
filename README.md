@@ -19,12 +19,18 @@ OS: Linux, MacOS, Windows (Windowsではnetrcが動きません)
 
 ## インストール
 
-Python 3で動作します（Python 3.4.4で動作を確認）。
+Python3以降で動作します。
 
 モジュールのインストールはrequirements.txtを使ってください。
 
 ```
 $ pip install -r requirements.txt
+```
+
+また、phantomjsが必要なのでnpmでインストールします。
+
+```
+$ npm install phantomjs
 ```
 
 ## 使い方
@@ -40,13 +46,13 @@ Saved as ./ハチ_MV「砂の惑星_feat.初音ミク」.mp4
 
 ### GUI (gui.py)
 
-![nicovideo_dl](https://user-images.githubusercontent.com/980141/29494124-72a2b4d4-85de-11e7-894d-9112dbac6e03.png)
-
 ```
 $ python gui.py
 ```
 
 で起動します。初回はユーザー名、パスワード、URLまたは動画IDをすべて入力する必要があります。
+
+![nicovideo_dl](https://user-images.githubusercontent.com/980141/29494124-72a2b4d4-85de-11e7-894d-9112dbac6e03.png)
 
 2回目以降はクッキーを用いてログインを試み、成功した場合はユーザー名やパスワードの入力なしでもダウンロードができます。
 
