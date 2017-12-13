@@ -139,9 +139,10 @@ class DownloadVideo(NicoWalker):
         return True
 
     @staticmethod
-    def convert_mp3(video_info, flv_path, save_directory, mp3_bitrate):
-        mp3_path = "".join(flv_path.split(".")[:-1]) + ".mp3"
+    def convert_mp3(video_info, flv_path, mp3_bitrate):
+        mp3_path = flv_path[:flv_path.rfind(".")] + ".mp3"
         mp3_path = mp3_path.replace("/", os.sep)
+        print(mp3_path)
         command = 'ffmpeg -y -i "{0}" -ab {1}k "{2}"'.format(flv_path, mp3_bitrate, mp3_path)
         run(command, shell=True)
         mp3_tag.add_tag(mp3_path,
@@ -166,7 +167,7 @@ class DownloadVideo(NicoWalker):
             return False
         # mp3へ変換
         if convert_mp3:
-            DownloadVideo.convert_mp3(video_info, flv_path, save_directory, mp3_bitrate)
+            DownloadVideo.convert_mp3(video_info, flv_path, mp3_bitrate)
         return True
 
 
