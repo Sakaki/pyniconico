@@ -11,3 +11,4 @@ kivy.deps.glew
 kivy
 selenium
 beautifulsoup4
+click

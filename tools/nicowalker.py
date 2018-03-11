@@ -8,7 +8,6 @@ import pickle
 import netrc
 import os
 from selenium import webdriver
-from bs4 import BeautifulSoup
 
 working_dir = path.dirname(path.abspath(__file__))
 cookie_path = "{0}/{1}".format(working_dir, "cookie.json")
