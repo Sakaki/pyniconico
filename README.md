@@ -96,6 +96,7 @@ password  testpasswd
 ---
 
 ```
+$ pip install requirements_gui.txt
 $ python gui.py
 ```
 
