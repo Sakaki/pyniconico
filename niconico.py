@@ -17,8 +17,8 @@ class NicoVideoArgs:
 
 
 @click.group()
-@click.option("--username", prompt="Please input your username/email", help="username/email")
-@click.option("--password", prompt="Please input your password", hide_input=True, help="password")
+@click.option("--username", "-u", prompt="Please input your username/email", help="username/email")
+@click.option("--password", "-p", prompt="Please input your password", hide_input=True, help="password")
 @click.pass_context
 def niconico(context, username, password):
     context.obj["username"] = username
@@ -27,15 +27,20 @@ def niconico(context, username, password):
 
 @niconico.command()
 @click.argument('video_id')
+@click.option("--location", "-l", default="./", help="Download directory", type=click.Path(
+    exists=True, file_okay=False, dir_okay=True, writable=True))
+@click.option("--overwrite", help="Overwrite", is_flag=True)
+@click.option("--mp3", help="Convert video to mp3 (requires ffmpeg in PATH)", is_flag=True)
+@click.option("--bit_rate", "-b", default=192, help="mp3 bit rate (kbps, default: 192)", type=int)
 @click.pass_context
-def download(context, video_id):
+def download(context, video_id, location, overwrite, mp3, bit_rate):
     print(video_id)
     arguments_dict = {
         "video_id": video_id,
-        "location": "./",
-        "overwrite": False,
-        "convert_mp3": False,
-        "bit_rate": 192,
+        "location": location,
+        "overwrite": overwrite,
+        "convert_mp3": mp3,
+        "bit_rate": bit_rate,
         "my_list": False,
         "mail": context.obj.get("username"),
         "password": context.obj.get("password")

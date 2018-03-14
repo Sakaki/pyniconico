@@ -8,7 +8,7 @@ from tools.nicowalker import NicoWalker
 from mylist_items import GetMyListItems
 from mylist import MyList
 from progressbar import ProgressBar, Percentage, Bar, ETA
-from subprocess import call as run
+import subprocess
 from tools import mp3_tag
 
 character_replace = {
@@ -98,7 +98,7 @@ class DownloadVideo(NicoWalker):
     @staticmethod
     def gen_video_path(save_directory, video_info):
         # FLV保存のためのファイル名を決定
-        if not save_directory.endswith('/'):
+        if not save_directory.endswith('/') and not save_directory.endswith(os.sep):
             save_directory += '/'
         # ファイル名に使用不可能の文字列は大文字に置き換える
         video_title = video_info["title"]
@@ -141,10 +141,13 @@ class DownloadVideo(NicoWalker):
     @staticmethod
     def convert_mp3(video_info, flv_path, mp3_bitrate):
         mp3_path = flv_path[:flv_path.rfind(".")] + ".mp3"
-        mp3_path = mp3_path.replace("/", os.sep)
         print(mp3_path)
         command = 'ffmpeg -y -i "{0}" -ab {1}k "{2}"'.format(flv_path, mp3_bitrate, mp3_path)
-        run(command, shell=True)
+        try:
+            subprocess.run(command, shell=True, check=True)
+        except subprocess.CalledProcessError:
+            print("ffmpegの実行に失敗しました。")
+            exit(-1)
         mp3_tag.add_tag(mp3_path,
                         video_info["thumbnail_url"],
                         video_info["title"],
@@ -153,6 +156,13 @@ class DownloadVideo(NicoWalker):
 
     @staticmethod
     def download(session, watch_id, save_directory, overwrite=False, convert_mp3=False, mp3_bitrate="192"):
+        if convert_mp3:
+            try:
+                subprocess.run(["ffmpeg", "-version"], shell=True, check=True, stdout=subprocess.DEVNULL)
+            except subprocess.CalledProcessError:
+                print("ffmpegが実行できません。ffmpegがインストールされ、PATHに含まれているか確認してください。\n"
+                      "インストールする場合、 https://www.ffmpeg.org/download.html を参照してください。")
+                exit(-1)
         video_info = DownloadVideo.get_video_metadata(session, watch_id)
         flv_url = DownloadVideo.get_download_url(session, video_info, watch_id)
         flv_path = DownloadVideo.gen_video_path(save_directory, video_info)

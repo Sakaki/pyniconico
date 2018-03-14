@@ -8,6 +8,7 @@ import pickle
 import netrc
 import os
 from selenium import webdriver
+from selenium.common.exceptions import WebDriverException
 
 working_dir = path.dirname(path.abspath(__file__))
 cookie_path = "{0}/{1}".format(working_dir, "cookie.json")
@@ -72,8 +73,12 @@ class NicoWalker(object):
             phantomjs_path = "node_modules/phantomjs/bin/phantomjs"
         try:
             driver = webdriver.PhantomJS(phantomjs_path)
-        except FileNotFoundError:
-            raise LoginFailedException("ログインに失敗しました")
+        except WebDriverException:
+            # 警告が出るのでNoneを設定。exitするより自然なコードを書きたかった。
+            driver = None
+            print("PhantomJSが見つかりませんでした。 npm install phantomjs でインストールしてください。")
+            print("WebDriverを作成することができませんでした。")
+            exit(-1)
         driver.get(login_page_url)
         mail = driver.find_element_by_id('input__mailtel')
         password = driver.find_element_by_id('input__password')
