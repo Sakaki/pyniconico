@@ -1,9 +1,9 @@
 # -*- coding:utf-8 -*-
 
 import click
-from nicovideo_dl import DownloadVideo
-from mylist import MyList
-from mylist_items import GetMyListItems
+from tools.nicovideo_dl import DownloadVideo
+from tools.mylist import MyList
+from tools.mylist_items import GetMyListItems
 
 
 class NicoVideoArgs:

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 
-from mylist import MyList
+from tools.mylist import MyList
 from tools.nicowalker import NicoWalker
 import re
 

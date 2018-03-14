@@ -12,14 +12,14 @@ from kivy.properties import ObjectProperty
 from kivy.factory import Factory
 from os import path, sep
 from threading import Thread
-from nicovideo_dl import DownloadVideo
+from tools.nicovideo_dl import DownloadVideo
 from tools.nicowalker import LoginFailedException
 from time import sleep
 from kivy.uix.modalview import ModalView
-from mylist import MyList
+from tools.mylist import MyList
 from kivy.adapters.listadapter import ListAdapter
-from kivy.uix.listview import ListItemButton, ListView
-from mylist_items import GetMyListItems
+from kivy.uix.listview import ListItemButton
+from tools.mylist_items import GetMyListItems
 
 # フォント設定
 font_dir = "{0}{1}font".format(path.dirname(path.abspath(__file__)), sep)
@@ -219,7 +219,7 @@ class Root(FloatLayout):
         else:
             if self.download_video.args.mp3conv:
                 self.status_text = "mp3に変換しています"
-                DownloadVideo.convert_mp3(video_info, flv_path, self.download_dir, self.download_video.args.bitrate)
+                DownloadVideo.convert_mp3(video_info, flv_path, self.download_video.args.bitrate)
             self.status_text = "ダウンロード完了 {0}".format(progress_text)
             return True
 

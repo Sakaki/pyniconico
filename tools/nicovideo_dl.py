@@ -5,8 +5,8 @@ from urllib import parse
 import os
 from tools import nico_xml_parser
 from tools.nicowalker import NicoWalker
-from mylist_items import GetMyListItems
-from mylist import MyList
+from tools.mylist_items import GetMyListItems
+from tools.mylist import MyList
 from progressbar import ProgressBar, Percentage, Bar, ETA
 import subprocess
 from tools import mp3_tag
