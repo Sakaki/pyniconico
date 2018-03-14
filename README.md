@@ -10,6 +10,7 @@ python >= 3.5
 
 ```bash
 $ git clone https://github.com/Sakaki/pyniconico.git
+$ cd pyniconico
 $ pip install -r requirements.txt
 $ npm install phantomjs
 $ python niconico.py -u username/mail -p password download sm32831006
