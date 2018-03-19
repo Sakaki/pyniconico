@@ -18,15 +18,18 @@ class NicoVideoArgs:
         self.passwd = argument_dict.get("password")
         self.mlname = argument_dict.get("mylist_name")
         self.raw = argument_dict.get("raw")
+        self.web_driver = argument_dict.get("web_driver")
 
 
 @click.group()
 @click.option("--username", "-u", prompt="Please input your username/email", help="username/email")
 @click.option("--password", "-p", prompt="Please input your password", hide_input=True, help="password")
+@click.option("--driver", "-d", default="chrome", type=click.Choice(["chrome", "firefox", "phantomjs"]))
 @click.pass_context
-def niconico(context, username, password):
+def niconico(context, username, password, driver):
     context.obj["username"] = username
     context.obj["password"] = password
+    context.obj["web_driver"] = driver
 
 
 @niconico.command()
@@ -48,7 +51,8 @@ def download(context, target, location, overwrite, mp3, bit_rate, mylist):
         "bit_rate": bit_rate,
         "my_list": mylist,
         "mail": context.obj.get("username"),
-        "password": context.obj.get("password")
+        "password": context.obj.get("password"),
+        "web_driver": context.obj.get("web_driver")
     }
     arguments = NicoVideoArgs(arguments_dict)
     DownloadVideo(arguments).invoke()
@@ -59,7 +63,8 @@ def download(context, target, location, overwrite, mp3, bit_rate, mylist):
 def mylist(context):
     arguments_dict = {
         "mail": context.obj.get("username"),
-        "password": context.obj.get("password")
+        "password": context.obj.get("password"),
+        "web_driver": context.obj.get("web_driver")
     }
     arguments = NicoVideoArgs(arguments_dict)
     MyList(arguments).invoke()
@@ -74,7 +79,8 @@ def mylist_items(context, mylist_name, raw):
         "mylist_name": mylist_name,
         "raw": raw,
         "mail": context.obj.get("username"),
-        "password": context.obj.get("password")
+        "password": context.obj.get("password"),
+        "web_driver": context.obj.get("web_driver")
     }
     arguments = NicoVideoArgs(arguments_dict)
     GetMyListItems(arguments).invoke()

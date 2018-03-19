@@ -8,19 +8,18 @@
 
 python >= 3.5
 
+Chrome(default) | Firefox | PhantomJS のいずれかがインストールされていること。
+
 ```bash
 $ git clone https://github.com/Sakaki/pyniconico.git
 $ cd pyniconico
 $ pip install -r requirements.txt
-$ npm install phantomjs
 $ python niconico.py -u username -p password download sm32831006
 sm32831006
 ゆるキャン△にハマるマン しめさば
 Downloading: 100%|#######################################################################|Time: 0:00:24
 Saved as .\ゆるキャン△にハマるマン.mp4
 ```
-
-ただし、ubuntuでは
 
 ### マイリスト一覧
 
@@ -75,9 +74,40 @@ Saved as .\ハチ_MV「砂の惑星_feat.初音ミク」.mp4
 ...
 ```
 
+## ブラウザ
+
+'-d'オプションで使用するヘッドレスブラウザを変更できます。
+
+### Chrome（デフォルト）
+
+```bash
+$ python niconico.py -u username -p password (-d chrome) mylist
+```
+
+### Firefox
+
+geckodriver経由でアクセスを行います。64bit専用。
+
+```bash
+$ python niconico.py -u username -p password -d firefox mylist
+```
+
+### PhantomJS（非推奨）
+
+PhantomJSを使用することは非推奨となっています。
+
+niconico.pyと同じディレクトリにて、'npm install phantomjs'を実行してください。
+
+```bash
+$ npm install phantomjs
+$ python niconico.py -u username -p password -d phantomjs mylist
+```
+
 ## 動作環境
 
 OS: Linux, MacOS, Windows (Windowsではnetrcが動きません)
+
+Firefoxは64ビットのみサポート（geckodriverを入れ替えれば任意のアーキテクチャで動くと思います）
 
 ## netrc
 
@@ -119,3 +149,11 @@ $ python gui.py
 設定ボタンからmp3変換を有効にし、ビットレートを調整してください。
 
 ![nicovideo_dl_settings](https://user-images.githubusercontent.com/980141/29494148-d805f75a-85de-11e7-8cfd-02e5635f4025.png)
+
+## ライセンス
+
+pyniconicoのソースコードのライセンスについては、LICENSEファイルを参照してください。
+
+また、pyniconicoはWebDriverとしてFirefoxを利用可能とするため、geckodriverを実行可能ファイルとして同梱しています。
+
+geckodriverのラインセンスは[こちら](https://www.mozilla.org/en-US/MPL/2.0/)を参照してください。
