@@ -8,9 +8,12 @@ import pickle
 import netrc
 import os
 from tools import web_drivers
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions
 
 working_dir = path.dirname(path.abspath(__file__))
-cookie_path = "{0}/{1}".format(working_dir, "cookie.json")
+cookie_path = "{0}/{1}".format(working_dir, "cookie.bin")
 cookie_path = cookie_path.replace("/", os.sep)
 
 
@@ -84,12 +87,15 @@ class NicoWalker(object):
         driver = web_driver_object().get_driver()
         login_page_url = "https://account.nicovideo.jp/login"
         driver.get(login_page_url)
+        WebDriverWait(driver, 20).until(expected_conditions.element_to_be_clickable((By.ID, "login__submit")))
         mail = driver.find_element_by_id('input__mailtel')
         password = driver.find_element_by_id('input__password')
         submit = driver.find_element_by_id("login__submit")
         mail.send_keys(self.mail)
         password.send_keys(self.password)
         submit.submit()
+        WebDriverWait(driver, 10).until(expected_conditions.presence_of_element_located(
+            {By.ID, "siteHeaderUserNickNameContainer"}))
         mylist_url = "http://www.nicovideo.jp/api/deflist/list"
         driver.get(mylist_url)
         # cookieを保存

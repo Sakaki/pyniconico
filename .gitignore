@@ -116,7 +116,7 @@ __cookie__
 .idea
 
 # Application temp file
-tools/cookie.json
+tools/cookie.bin
 *.mp3
 *.mp4
 *.flv
