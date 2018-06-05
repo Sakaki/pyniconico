@@ -90,11 +90,15 @@ Saved as .\ハチ_MV「砂の惑星_feat.初音ミク」.mp4
 
 ## 動作環境
 
-Windows: AMD64 / Linux: AMD64
+Windows: 64bit
 
-OS: Linux, MacOS, Windows (Windowsではnetrcが動きません)
+Linux: 64bit
 
-Firefoxは64ビットのみサポート（geckodriverを入れ替えれば任意のアーキテクチャで動くと思います）
+MacOS: 対応予定
+
+* Windowsではnetrcが動きません
+* 32bitのOSは動作確認できれば動くので対応予定です
+* WebDriverでarmのバイナリが動く場合は対応を検討しています
 
 ## netrc
 

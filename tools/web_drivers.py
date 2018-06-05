@@ -8,6 +8,7 @@ import platform
 import requests
 import os
 import zipfile
+import tarfile
 
 
 # WebDriverのスーパークラス
@@ -58,6 +59,11 @@ class WebDriver:
         with zipfile.ZipFile(self.archive_path) as archive_zip:
             archive_zip.extractall(self.working_directory)
 
+    # tarファイルの解凍
+    def extract_tar(self):
+        with tarfile.TarFile(self.archive_path) as archive_tar:
+            archive_tar.extractall(self.working_directory)
+
     # ドライバを生成
     def generate_driver(self):
         return None
@@ -80,6 +86,12 @@ class PhantomJSDriver(WebDriver):
                 "download_url": "https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-windows.zip",
                 "path": "/download/PhantomJS/phantomjs-2.1.1-windows/bin/phantomjs.exe"
             }
+        },
+        "Linux": {
+            "64bit": {
+                "download_url": "https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2",
+                "path": "/download/PhantomJS/phantomjs-2.1.1-windows/bin/phantomjs"
+            }
         }
     }
     driver_info["Windows"]["32bit"] = driver_info["Windows"]["64bit"]
@@ -88,6 +100,8 @@ class PhantomJSDriver(WebDriver):
     def extract(self):
         if self.system == "Windows":
             self.extract_zip()
+        elif self.system == "Linux":
+            self.extract_tar()
 
     def generate_driver(self):
         return webdriver.PhantomJS(self.execute_path)
