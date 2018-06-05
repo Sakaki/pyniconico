@@ -95,7 +95,7 @@ class NicoWalker(object):
         password.send_keys(self.password)
         submit.submit()
         WebDriverWait(driver, 10).until(expected_conditions.presence_of_element_located(
-            {By.ID, "siteHeaderUserNickNameContainer"}))
+            (By.ID, "siteHeaderUserNickNameContainer")))
         mylist_url = "http://www.nicovideo.jp/api/deflist/list"
         driver.get(mylist_url)
         # cookieを保存

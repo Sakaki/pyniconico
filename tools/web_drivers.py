@@ -24,7 +24,7 @@ class WebDriver:
         self.working_directory = (current_abs_directory + self.working_directory).replace("/", os.sep)
         # OSやアーキテクチャの情報を取得
         self.system = platform.system()
-        self.machine = platform.machine()
+        self.machine = platform.architecture()[0]
         platform_driver = self.driver_info.get(self.system).get(self.machine)
         # WebDriverのダウンロードURLを取得
         self.driver_url = platform_driver.get("download_url")
@@ -76,12 +76,13 @@ class WebDriver:
 class PhantomJSDriver(WebDriver):
     driver_info = {
         "Windows": {
-            "AMD64": {
+            "64bit": {
                 "download_url": "https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-windows.zip",
                 "path": "/download/PhantomJS/phantomjs-2.1.1-windows/bin/phantomjs.exe"
             }
         }
     }
+    driver_info["Windows"]["32bit"] = driver_info["Windows"]["64bit"]
     working_directory = "/download/PhantomJS"
 
     def extract(self):
@@ -95,7 +96,7 @@ class PhantomJSDriver(WebDriver):
 class GeckoDriver(WebDriver):
     driver_info = {
         "Windows": {
-            "AMD64": {
+            "64bit": {
                 "download_url": "https://github.com/mozilla/geckodriver/releases/download/v0.20.1/geckodriver-v0.20.1-win64.zip",
                 "path": "/download/geckodriver/geckodriver.exe"
             }
@@ -116,7 +117,7 @@ class GeckoDriver(WebDriver):
 class ChromeDriver(WebDriver):
     driver_info = {
         "Windows": {
-            "AMD64": {
+            "64bit": {
                 "download_url": "https://chromedriver.storage.googleapis.com/2.39/chromedriver_win32.zip",
                 "path": "/download/ChromeDriver/chromedriver.exe"
             }

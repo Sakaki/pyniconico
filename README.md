@@ -21,6 +21,20 @@ Downloading: 100%|##############################################################
 Saved as .\ゆるキャン△にハマるマン.mp4
 ```
 
+Firefox
+
+```bash
+python niconico.py -u username -p password -d firefox download sm32831006
+```
+
+PhantomJS
+
+```bash
+python niconico.py -u username -p password -d phantomjs download sm32831006
+```
+
+※現在、PhantomJSを使用することは非推奨となっています。
+
 ### マイリスト一覧
 
 ```bash
@@ -74,33 +88,9 @@ Saved as .\ハチ_MV「砂の惑星_feat.初音ミク」.mp4
 ...
 ```
 
-## ブラウザ
-
-'-d'オプションで使用するヘッドレスブラウザを変更できます。
-
-### Chrome（デフォルト）
-
-```bash
-$ python niconico.py -u username -p password (-d chrome) mylist
-```
-
-### Firefox
-
-geckodriver経由でアクセスを行います。64bit専用。
-
-```bash
-$ python niconico.py -u username -p password -d firefox mylist
-```
-
-### PhantomJS（非推奨）
-
-現在、PhantomJSを使用することは非推奨となっています。
-
-```bash
-$ python niconico.py -u username -p password -d phantomjs mylist
-```
-
 ## 動作環境
+
+Windows: AMD64 / Linux: AMD64
 
 OS: Linux, MacOS, Windows (Windowsではnetrcが動きません)
 
