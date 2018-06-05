@@ -94,12 +94,9 @@ $ python niconico.py -u username -p password -d firefox mylist
 
 ### PhantomJS（非推奨）
 
-PhantomJSを使用することは非推奨となっています。
-
-niconico.pyと同じディレクトリにて、'npm install phantomjs'を実行してください。
+現在、PhantomJSを使用することは非推奨となっています。
 
 ```bash
-$ npm install phantomjs
 $ python niconico.py -u username -p password -d phantomjs mylist
 ```
 
