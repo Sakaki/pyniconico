@@ -61,7 +61,7 @@ class WebDriver:
 
     # tarファイルの解凍
     def extract_tar(self):
-        with tarfile.TarFile(self.archive_path) as archive_tar:
+        with tarfile.open(self.archive_path) as archive_tar:
             archive_tar.extractall(self.working_directory)
 
     # ドライバを生成
@@ -90,7 +90,7 @@ class PhantomJSDriver(WebDriver):
         "Linux": {
             "64bit": {
                 "download_url": "https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2",
-                "path": "/download/PhantomJS/phantomjs-2.1.1-windows/bin/phantomjs"
+                "path": "/download/PhantomJS/phantomjs-2.1.1-linux-x86_64/bin/phantomjs"
             }
         }
     }
