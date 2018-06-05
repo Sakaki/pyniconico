@@ -4,6 +4,13 @@ import click
 from tools.nicovideo_dl import DownloadVideo
 from tools.mylist import MyList
 from tools.mylist_items import GetMyListItems
+import netrc
+
+try:
+    auth = netrc.netrc()
+    username, _, password = auth.authenticators("nicovideo")
+except OSError as e:
+    username = password = None
 
 
 class NicoVideoArgs:

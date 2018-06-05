@@ -7,10 +7,7 @@ import requests
 import pickle
 import netrc
 import os
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options as ChromeOptions
-from selenium.webdriver.firefox.options import Options as FirefoxOptions
-from selenium.common.exceptions import WebDriverException
+from tools import web_drivers
 
 working_dir = path.dirname(path.abspath(__file__))
 cookie_path = "{0}/{1}".format(working_dir, "cookie.json")
@@ -19,10 +16,10 @@ cookie_path = cookie_path.replace("/", os.sep)
 
 class NicoWalker(object):
     command_name = "Default Command"
-    web_drivers = {
-        "phantomjs": webdriver.PhantomJS,
-        "chrome": webdriver.Chrome,
-        "firefox": webdriver.Firefox
+    available_drivers = {
+        "phantomjs": web_drivers.PhantomJSDriver,
+        "chrome": web_drivers.ChromeDriver,
+        "firefox": web_drivers.GeckoDriver
     }
 
     def __init__(self):
@@ -79,34 +76,12 @@ class NicoWalker(object):
             # ログインできていたらリターン
             if self.is_logged_in():
                 return
-        web_driver_object = NicoWalker.web_drivers.get(self.web_driver, None)
+        web_driver_object = NicoWalker.available_drivers.get(self.web_driver, None)
         if web_driver_object is None:
             print("指定されたWebDriverが見つかりませんでした。\n"
                   "phantomjs, chrome, firefoxのいずれかを指定してください。")
             exit(-1)
-        driver = None
-        try:
-            if web_driver_object == webdriver.Chrome:
-                options = ChromeOptions()
-                options.set_headless(ChromeOptions.headless)
-                driver = web_driver_object(options=options)
-            elif web_driver_object == webdriver.Firefox:
-                options = FirefoxOptions()
-                options.set_headless(FirefoxOptions.headless)
-                if os.name == 'nt':
-                    geckodriver_path = "geckodrivers/geckodriver_win64.exe"
-                else:
-                    geckodriver_path = "geckodrivers/geckodriver_linux64"
-                driver = web_driver_object(executable_path=geckodriver_path, options=options)
-            elif web_driver_object == webdriver.PhantomJS:
-                if os.name == 'nt':
-                    phantomjs_path = "node_modules/phantomjs/lib/phantom/bin/phantomjs.exe"
-                else:
-                    phantomjs_path = "node_modules/phantomjs/bin/phantomjs"
-                driver = web_driver_object(phantomjs_path)
-        except WebDriverException as e:
-            print("WebDriver({0})を作成することができませんでした。 {1}".format(self.web_driver, e))
-            exit(-1)
+        driver = web_driver_object().get_driver()
         login_page_url = "https://account.nicovideo.jp/login"
         driver.get(login_page_url)
         mail = driver.find_element_by_id('input__mailtel')

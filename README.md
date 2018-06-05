@@ -154,6 +154,16 @@ $ python gui.py
 
 pyniconicoのソースコードのライセンスについては、LICENSEファイルを参照してください。
 
-また、pyniconicoはWebDriverとしてFirefoxを利用可能とするため、geckodriverを実行可能ファイルとして同梱しています。
+また、selenimuのWebDriverとしてChromeDriver・geckodriver・PhantomJSを自動的にダウンロードします。
 
-geckodriverのラインセンスは[こちら](https://www.mozilla.org/en-US/MPL/2.0/)を参照してください。
+ライセンスについては、それぞれ以下のようになっています。
+
+|WebDriver|Webサイト|ライセンス|
+|---|---|---|
+|ChdomeDriver|http://chromedriver.chromium.org/|明記無し|
+|geckodriver|https://github.com/mozilla/geckodriver|Mozilla Public License Version 2.0|
+|PhantomJS|http://phantomjs.org/download.html|BSD license|
+
+WebDriverは tools/download 以下にダウンロードされます。
+
+各ディレクトリにライセンスファイルを配置していますので、そちらもご参照ください。
