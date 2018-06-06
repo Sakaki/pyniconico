@@ -9,8 +9,12 @@ import netrc
 try:
     auth = netrc.netrc()
     username, _, password = auth.authenticators("nicovideo")
+    username_options = {"default": username}
+    password_options = {"default": password}
 except OSError as e:
     username = password = None
+    username_options = {"prompt": "Please input your username/email"}
+    password_options = {"prompt": "Please input your password", "hide_input": True}
 
 
 class NicoVideoArgs:
@@ -29,8 +33,8 @@ class NicoVideoArgs:
 
 
 @click.group()
-@click.option("--username", "-u", prompt="Please input your username/email", help="username/email")
-@click.option("--password", "-p", prompt="Please input your password", hide_input=True, help="password")
+@click.option("--username", "-u", help="username/email", **username_options)
+@click.option("--password", "-p", help="password", **password_options)
 @click.option("--driver", "-d", default="chrome", type=click.Choice(["chrome", "firefox", "phantomjs"]))
 @click.pass_context
 def niconico(context, username, password, driver):

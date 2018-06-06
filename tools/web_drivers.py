@@ -10,6 +10,7 @@ import os
 import zipfile
 import tarfile
 import json
+import stat
 
 with open("{}/web_drivers.json".format(os.path.dirname(os.path.abspath(__file__)))) as f:
     driver_json = json.loads(f.read())
@@ -110,7 +111,7 @@ class GeckoDriver(WebDriver):
 
     def generate_driver(self):
         options = FirefoxOptions()
-        options.set_headless(FirefoxOptions.headless)
+        options.add_argument("-headless")
         return webdriver.Firefox(executable_path=self.execute_path, options=options)
 
 
@@ -120,10 +121,12 @@ class ChromeDriver(WebDriver):
 
     def extract(self):
         self.extract_zip()
+        if self.system == "Linux":
+            os.chmod(self.execute_path, stat.S_IRWXU)
 
     def generate_driver(self):
         options = ChromeOptions()
-        options.set_headless(ChromeOptions.headless)
+        options.add_argument("--headless")
         return webdriver.Chrome(self.execute_path, options=options)
 
 
