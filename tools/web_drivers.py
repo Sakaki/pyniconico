@@ -105,6 +105,8 @@ class GeckoDriver(WebDriver):
     def extract(self):
         if self.system == "Windows":
             self.extract_zip()
+        elif self.system == "Linux":
+            self.extract_tar()
 
     def generate_driver(self):
         options = FirefoxOptions()
@@ -117,8 +119,7 @@ class ChromeDriver(WebDriver):
     working_directory = "/download/ChromeDriver"
 
     def extract(self):
-        if self.system == "Windows" or self.system == "Linux":
-            self.extract_zip()
+        self.extract_zip()
 
     def generate_driver(self):
         options = ChromeOptions()
