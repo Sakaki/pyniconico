@@ -90,15 +90,14 @@ Saved as .\ハチ_MV「砂の惑星_feat.初音ミク」.mp4
 
 ## 動作環境
 
-Windows: 64bit
+OS: Windows / Linux
 
-Linux: 64bit
+|OS / ブラウザ|Chrome|Firefox|PhantomJS|
+|---|---|---|---|
+|Windows|64bit|64bit / 32bit|64bit / 32bit|
+|Linux|64bit|64bit / 32bit|64bit / 32bit|
 
-MacOS: 対応予定
-
-* Windowsではnetrcが動きません
-* 32bitのOSは動作確認できれば動くので対応予定です
-* WebDriverでarmのバイナリが動く場合は対応を検討しています
+※Windowsではnetrcが動きません
 
 ## netrc
 

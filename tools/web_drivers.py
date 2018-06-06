@@ -9,6 +9,10 @@ import requests
 import os
 import zipfile
 import tarfile
+import json
+
+with open("{}/web_drivers.json".format(os.path.dirname(os.path.abspath(__file__)))) as f:
+    driver_json = json.loads(f.read())
 
 
 # WebDriverのスーパークラス
@@ -80,20 +84,7 @@ class WebDriver:
 
 
 class PhantomJSDriver(WebDriver):
-    driver_info = {
-        "Windows": {
-            "64bit": {
-                "download_url": "https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-windows.zip",
-                "path": "/download/PhantomJS/phantomjs-2.1.1-windows/bin/phantomjs.exe"
-            }
-        },
-        "Linux": {
-            "64bit": {
-                "download_url": "https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2",
-                "path": "/download/PhantomJS/phantomjs-2.1.1-linux-x86_64/bin/phantomjs"
-            }
-        }
-    }
+    driver_info = driver_json.get("PhantomJS")
     driver_info["Windows"]["32bit"] = driver_info["Windows"]["64bit"]
     working_directory = "/download/PhantomJS"
 
@@ -108,14 +99,7 @@ class PhantomJSDriver(WebDriver):
 
 
 class GeckoDriver(WebDriver):
-    driver_info = {
-        "Windows": {
-            "64bit": {
-                "download_url": "https://github.com/mozilla/geckodriver/releases/download/v0.20.1/geckodriver-v0.20.1-win64.zip",
-                "path": "/download/geckodriver/geckodriver.exe"
-            }
-        }
-    }
+    driver_info = driver_json.get("GeckoDriver")
     working_directory = "/download/geckodriver"
 
     def extract(self):
@@ -129,18 +113,11 @@ class GeckoDriver(WebDriver):
 
 
 class ChromeDriver(WebDriver):
-    driver_info = {
-        "Windows": {
-            "64bit": {
-                "download_url": "https://chromedriver.storage.googleapis.com/2.39/chromedriver_win32.zip",
-                "path": "/download/ChromeDriver/chromedriver.exe"
-            }
-        }
-    }
+    driver_info = driver_json.get("ChromeDriver")
     working_directory = "/download/ChromeDriver"
 
     def extract(self):
-        if self.system == "Windows":
+        if self.system == "Windows" or self.system == "Linux":
             self.extract_zip()
 
     def generate_driver(self):
