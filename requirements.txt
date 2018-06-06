@@ -3,8 +3,6 @@ requests
 mutagen
 pillow
 argparse
-docutils
-pygments
 selenium
 beautifulsoup4
 click

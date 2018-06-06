@@ -7,16 +7,23 @@ import requests
 import pickle
 import netrc
 import os
-from selenium import webdriver
-from selenium.common.exceptions import WebDriverException
+from tools import web_drivers
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions
 
 working_dir = path.dirname(path.abspath(__file__))
-cookie_path = "{0}/{1}".format(working_dir, "cookie.json")
+cookie_path = "{0}/{1}".format(working_dir, "cookie.bin")
 cookie_path = cookie_path.replace("/", os.sep)
 
 
 class NicoWalker(object):
     command_name = "Default Command"
+    available_drivers = {
+        "phantomjs": web_drivers.PhantomJSDriver,
+        "chrome": web_drivers.ChromeDriver,
+        "firefox": web_drivers.GeckoDriver
+    }
 
     def __init__(self):
         self.parser = argparse.ArgumentParser(description=self.command_name)
@@ -28,9 +35,14 @@ class NicoWalker(object):
                                  dest='passwd',
                                  default=None,
                                  help='password')
+        self.parser.add_argument('-d', '--driver',
+                                 dest='web_driver',
+                                 default='phantomjs',
+                                 help='password')
         self.mail = None
         self.password = None
         self.args = None
+        self.web_driver = None
         self.session = requests.Session()
 
     def set_parser(self, args=None):
@@ -57,6 +69,7 @@ class NicoWalker(object):
         # ログインしてセッションを取得
         self.mail = mail
         self.password = password
+        self.web_driver = args.web_driver
         self.login()
 
     def login(self, force=False):
@@ -66,26 +79,23 @@ class NicoWalker(object):
             # ログインできていたらリターン
             if self.is_logged_in():
                 return
-        login_page_url = "https://account.nicovideo.jp/login"
-        if os.name == 'nt':
-            phantomjs_path = "node_modules/phantomjs/lib/phantom/bin/phantomjs.exe"
-        else:
-            phantomjs_path = "node_modules/phantomjs/bin/phantomjs"
-        try:
-            driver = webdriver.PhantomJS(phantomjs_path)
-        except WebDriverException:
-            # 警告が出るのでNoneを設定。exitするより自然なコードを書きたかった。
-            driver = None
-            print("PhantomJSが見つかりませんでした。 npm install phantomjs でインストールしてください。")
-            print("WebDriverを作成することができませんでした。")
+        web_driver_object = NicoWalker.available_drivers.get(self.web_driver, None)
+        if web_driver_object is None:
+            print("指定されたWebDriverが見つかりませんでした。\n"
+                  "phantomjs, chrome, firefoxのいずれかを指定してください。")
             exit(-1)
+        driver = web_driver_object().get_driver()
+        login_page_url = "https://account.nicovideo.jp/login"
         driver.get(login_page_url)
+        WebDriverWait(driver, 20).until(expected_conditions.element_to_be_clickable((By.ID, "login__submit")))
         mail = driver.find_element_by_id('input__mailtel')
         password = driver.find_element_by_id('input__password')
         submit = driver.find_element_by_id("login__submit")
         mail.send_keys(self.mail)
         password.send_keys(self.password)
         submit.submit()
+        WebDriverWait(driver, 10).until(expected_conditions.presence_of_element_located(
+            (By.ID, "siteHeaderUserNickNameContainer")))
         mylist_url = "http://www.nicovideo.jp/api/deflist/list"
         driver.get(mylist_url)
         # cookieを保存

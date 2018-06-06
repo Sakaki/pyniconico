@@ -116,10 +116,18 @@ __cookie__
 .idea
 
 # Application temp file
-tools/cookie.json
+tools/cookie.bin
 *.mp3
 *.mp4
 *.flv
 
 # node modules
 node_modules
+
+# WebDriver files
+tools/download/ChromeDriver/*
+!tools/download/ChromeDriver/README.md
+tools/download/geckodriver/*
+!tools/download/geckodriver/mpl-v2.0.md
+tools/download/PhantomJS/*
+!tools/download/PhantomJS/LICENSE.BSD

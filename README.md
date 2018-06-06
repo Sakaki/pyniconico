@@ -8,11 +8,12 @@
 
 python >= 3.5
 
+Chrome(default) | Firefox | PhantomJS のいずれかがインストールされていること。
+
 ```bash
 $ git clone https://github.com/Sakaki/pyniconico.git
 $ cd pyniconico
 $ pip install -r requirements.txt
-$ npm install phantomjs
 $ python niconico.py -u username -p password download sm32831006
 sm32831006
 ゆるキャン△にハマるマン しめさば
@@ -20,7 +21,19 @@ Downloading: 100%|##############################################################
 Saved as .\ゆるキャン△にハマるマン.mp4
 ```
 
-ただし、ubuntuでは
+Firefox
+
+```bash
+python niconico.py -u username -p password -d firefox download sm32831006
+```
+
+PhantomJS
+
+```bash
+python niconico.py -u username -p password -d phantomjs download sm32831006
+```
+
+※現在、PhantomJSを使用することは非推奨となっています。
 
 ### マイリスト一覧
 
@@ -77,7 +90,14 @@ Saved as .\ハチ_MV「砂の惑星_feat.初音ミク」.mp4
 
 ## 動作環境
 
-OS: Linux, MacOS, Windows (Windowsではnetrcが動きません)
+OS: Windows / Linux
+
+|OS / ブラウザ|Chrome|Firefox|PhantomJS|
+|---|---|---|---|
+|Windows|64bit|64bit / 32bit|64bit / 32bit|
+|Linux|64bit|64bit / 32bit|64bit / 32bit|
+
+※Windowsではnetrcが動きません
 
 ## netrc
 
@@ -119,3 +139,21 @@ $ python gui.py
 設定ボタンからmp3変換を有効にし、ビットレートを調整してください。
 
 ![nicovideo_dl_settings](https://user-images.githubusercontent.com/980141/29494148-d805f75a-85de-11e7-8cfd-02e5635f4025.png)
+
+## ライセンス
+
+pyniconicoのソースコードのライセンスについては、LICENSEファイルを参照してください。
+
+また、selenimuのWebDriverとしてChromeDriver・geckodriver・PhantomJSを自動的にダウンロードします。
+
+ライセンスについては、それぞれ以下のようになっています。
+
+|WebDriver|Webサイト|ライセンス|
+|---|---|---|
+|ChdomeDriver|http://chromedriver.chromium.org/|明記無し|
+|geckodriver|https://github.com/mozilla/geckodriver|Mozilla Public License Version 2.0|
+|PhantomJS|http://phantomjs.org/download.html|BSD license|
+
+WebDriverは tools/download 以下にダウンロードされます。
+
+各ディレクトリにライセンスファイルを配置していますので、そちらもご参照ください。
