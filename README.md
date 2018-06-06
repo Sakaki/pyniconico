@@ -8,7 +8,7 @@
 
 python >= 3.5
 
-Chrome(default) | Firefox | PhantomJS のいずれかがインストールされていること。
+Google ChromeかFirefoxのいずれかがインストールされていること（デフォルトではChromeが使用されます）。
 
 ```bash
 $ git clone https://github.com/Sakaki/pyniconico.git
