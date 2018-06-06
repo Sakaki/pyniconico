@@ -40,20 +40,21 @@ class WebDriver:
         self.archive_path = "{0}/{1}".format(self.working_directory, "archive").replace("/", os.sep)
         # DL実行
         self.download()
+        # DLしたらファイルを解凍
+        if not os.path.exists(self.execute_path):
+            self.extract()
 
     # WebDriverのアーカイブをダウンロード
     def download(self):
         # もしファイルが存在したらスキップ
         if os.path.exists(self.archive_path):
             return
-        print("Downloading web driver archive.")
+        print("WebDriverを取得しています。")
         raw = requests.get(self.driver_url, stream=True)
         with open(self.archive_path, "wb") as f:
             for chunk in raw.iter_content(chunk_size=128):
                 f.write(chunk)
-        print("Download completed.")
-        # DLしたらファイルを解凍
-        self.extract()
+        print("WebDriverの取得が完了しました。")
 
     # DLしたファイルを解凍
     def extract(self):
