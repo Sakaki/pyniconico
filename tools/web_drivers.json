@@ -50,6 +50,12 @@
         "path": "/download/ChromeDriver/chromedriver.exe"
       }
     },
+    "Windows": {
+      "32bit": {
+        "download_url": "https://chromedriver.storage.googleapis.com/2.39/chromedriver_win32.zip",
+        "path": "/download/ChromeDriver/chromedriver.exe"
+      }
+    },
     "Linux": {
       "64bit": {
         "download_url": "https://chromedriver.storage.googleapis.com/2.39/chromedriver_linux64.zip",

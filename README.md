@@ -94,7 +94,7 @@ OS: Windows / Linux
 
 |OS / ブラウザ|Chrome|Firefox|PhantomJS|
 |---|---|---|---|
-|Windows|64bit|64bit / 32bit|64bit / 32bit|
+|Windows|64bit / 32bit|64bit / 32bit|64bit / 32bit|
 |Linux|64bit|64bit / 32bit|64bit / 32bit|
 
 ※Windowsではnetrcが動きません
