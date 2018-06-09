@@ -1,0 +1,18 @@
+venv/
+
+# PyCharm
+.idea
+
+# Application temp file
+tools/cookie.bin
+*.mp3
+*.mp4
+*.flv
+
+# WebDriver files
+tools/download/ChromeDriver/*
+!tools/download/ChromeDriver/README.md
+tools/download/geckodriver/*
+!tools/download/geckodriver/mpl-v2.0.md
+tools/download/PhantomJS/*
+!tools/download/PhantomJS/LICENSE.BSD

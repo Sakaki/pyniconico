@@ -1,0 +1,48 @@
+version: "3"
+
+services:
+  download:
+    build:
+      context: .
+    volumes:
+      - ./:/download
+    entrypoint:
+      - python
+      - ./niconico.py
+      - -u
+      - $username
+      - -p
+      - $password
+      - -d
+      - $driver
+      - download
+      - -l
+      - /download
+
+  mylist:
+    build:
+      context: .
+    entrypoint:
+      - python
+      - ./niconico.py
+      - -u
+      - $username
+      - -p
+      - $password
+      - -d
+      - $driver
+      - mylist
+
+  mylist_items:
+    build:
+      context: .
+    entrypoint:
+      - python
+      - ./niconico.py
+      - -u
+      - $username
+      - -p
+      - $password
+      - -d
+      - $driver
+      - mylist_items

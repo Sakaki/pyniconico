@@ -97,5 +97,9 @@ def mylist_items(context, mylist_name, raw):
     GetMyListItems(arguments).invoke()
 
 
-if __name__ == '__main__':
+def main():
     niconico(obj={})
+
+
+if __name__ == '__main__':
+    main()

@@ -35,6 +35,30 @@ python niconico.py -u username -p password -d phantomjs download sm32831006
 
 ※現在、PhantomJSを使用することは非推奨となっています。
 
+### インストール
+
+pipで入れるとnicopyコマンドが使えるようになります。
+
+```bash
+$ pip install .
+$ nicopy --help
+```
+
+### Dockerで実行
+
+.env ファイルを作成してdocker-composeコマンドを実行してください。
+
+```env
+$ cat .env
+driver=firefox
+username=someone@mail.com
+password=some_password
+
+$ docker-compose run download sm32831006
+$ docker-compose run mylist
+$ docker-compose run mylist_items
+```
+
 ### マイリスト一覧
 
 ```bash
