@@ -12,14 +12,14 @@ from kivy.properties import ObjectProperty
 from kivy.factory import Factory
 from os import path, sep
 from threading import Thread
-from tools.nicovideo_dl import DownloadVideo
-from tools.nicowalker import LoginFailedException
+from nico_tools.nicovideo_dl import DownloadVideo
+from nico_tools.nicowalker import LoginFailedException
 from time import sleep
 from kivy.uix.modalview import ModalView
-from tools.mylist import MyList
+from nico_tools.mylist import MyList
 from kivy.adapters.listadapter import ListAdapter
 from kivy.uix.listview import ListItemButton
-from tools.mylist_items import GetMyListItems
+from nico_tools.mylist_items import GetMyListItems
 
 # フォント設定
 font_dir = "{0}{1}font".format(path.dirname(path.abspath(__file__)), sep)

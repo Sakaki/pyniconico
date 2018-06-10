@@ -2,7 +2,9 @@
 
 ニコニコ動画をpythonから扱うツールです。
 
-サーバーに負荷をかけない範囲でお使いください。
+サーバーに過度の負荷をかけない範囲でお使いください。
+
+また、違法にアップロードされたコンテンツをダウンロードする行為は犯罪となりますのでお止めください。
 
 ## 使い方
 
@@ -34,6 +36,30 @@ python niconico.py -u username -p password -d phantomjs download sm32831006
 ```
 
 ※現在、PhantomJSを使用することは非推奨となっています。
+
+### インストール
+
+pipでインストールすることにより、nicopyコマンドが使えるようになります。
+
+```bash
+$ pip install .
+$ nicopy --help
+```
+
+### Dockerで実行
+
+.env ファイルを作成してdocker-composeコマンドを実行してください。
+
+```env
+$ cat .env
+driver=firefox
+username=someone@mail.com
+password=some_password
+
+$ docker-compose run download sm32831006
+$ docker-compose run mylist
+$ docker-compose run mylist_items
+```
 
 ### マイリスト一覧
 
@@ -154,6 +180,6 @@ pyniconicoのソースコードのライセンスについては、LICENSEファ
 |geckodriver|https://github.com/mozilla/geckodriver|Mozilla Public License Version 2.0|
 |PhantomJS|http://phantomjs.org/download.html|BSD license|
 
-WebDriverは tools/download 以下にダウンロードされます。
+WebDriverは nico_tools/download 以下にダウンロードされます。
 
 各ディレクトリにライセンスファイルを配置していますので、そちらもご参照ください。
