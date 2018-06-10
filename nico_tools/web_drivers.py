@@ -122,7 +122,7 @@ class ChromeDriver(WebDriver):
 
     def extract(self):
         self.extract_zip()
-        if self.system == "Linux":
+        if self.system in {"Linux", "Darwin"}:
             os.chmod(self.execute_path, stat.S_IRWXU)
 
     def generate_driver(self):
