@@ -28,4 +28,12 @@ setup(
         [console_scripts]
         nicopy=niconico:main
     ''',
+    package_data={
+        'nico_tools': [
+            'web_drivers.json',
+            'download/ChromeDriver/README.md',
+            'download/geckodriver/mpl-v2.0.md',
+            'download/PhantomJS/LICENSE.BSD'
+        ]
+    },
 )

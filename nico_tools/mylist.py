@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 
-from tools import convunichrs
-from tools.nicowalker import NicoWalker
+from nico_tools import convunichrs
+from nico_tools.nicowalker import NicoWalker
 
 
 class MyList(NicoWalker):

@@ -1,9 +1,9 @@
 # -*- coding:utf-8 -*-
 
 import click
-from tools.nicovideo_dl import DownloadVideo
-from tools.mylist import MyList
-from tools.mylist_items import GetMyListItems
+from nico_tools.nicovideo_dl import DownloadVideo
+from nico_tools.mylist import MyList
+from nico_tools.mylist_items import GetMyListItems
 import netrc
 
 try:

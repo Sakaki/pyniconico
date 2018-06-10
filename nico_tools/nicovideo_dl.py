@@ -3,13 +3,13 @@
 
 from urllib import parse
 import os
-from tools import nico_xml_parser
-from tools.nicowalker import NicoWalker
-from tools.mylist_items import GetMyListItems
-from tools.mylist import MyList
+from nico_tools import nico_xml_parser
+from nico_tools.nicowalker import NicoWalker
+from nico_tools.mylist_items import GetMyListItems
+from nico_tools.mylist import MyList
 from progressbar import ProgressBar, Percentage, Bar, ETA
 import subprocess
-from tools import mp3_tag
+from nico_tools import mp3_tag
 
 character_replace = {
     "\\": "＼",

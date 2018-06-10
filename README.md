@@ -178,6 +178,6 @@ pyniconicoのソースコードのライセンスについては、LICENSEファ
 |geckodriver|https://github.com/mozilla/geckodriver|Mozilla Public License Version 2.0|
 |PhantomJS|http://phantomjs.org/download.html|BSD license|
 
-WebDriverは tools/download 以下にダウンロードされます。
+WebDriverは nico_tools/download 以下にダウンロードされます。
 
 各ディレクトリにライセンスファイルを配置していますので、そちらもご参照ください。
