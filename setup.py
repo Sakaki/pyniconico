@@ -14,6 +14,7 @@ setup(
     license='Written in ./LICENSE for this project. But please be careful this project download external programs.',
     packages=find_packages(exclude=('tests', 'docs')),
     install_requires=[
+        'wheel',
         'progressbar2',
         'requests',
         'mutagen',

@@ -1,3 +1,4 @@
+wheel
 progressbar2
 requests
 mutagen
