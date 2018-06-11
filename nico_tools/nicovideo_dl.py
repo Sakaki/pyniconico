@@ -158,7 +158,7 @@ class DownloadVideo(NicoWalker):
     def download(session, watch_id, save_directory, overwrite=False, convert_mp3=False, mp3_bitrate="192"):
         if convert_mp3:
             try:
-                subprocess.run(["ffmpeg", "-version"], shell=True, check=True, stdout=subprocess.DEVNULL)
+                subprocess.run(["ffmpeg -version"], shell=True, check=True, stdout=subprocess.DEVNULL)
             except subprocess.CalledProcessError:
                 print("ffmpegが実行できません。ffmpegがインストールされ、PATHに含まれているか確認してください。\n"
                       "インストールする場合、 https://www.ffmpeg.org/download.html を参照してください。")
