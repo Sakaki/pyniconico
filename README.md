@@ -115,12 +115,11 @@ Saved as .\ハチ_MV「砂の惑星_feat.初音ミク」.mp4
 
 ## 動作環境
 
-OS: Windows / Linux
-
 |OS / ブラウザ|Chrome|Firefox|PhantomJS|
 |---|---|---|---|
 |Windows|64bit / 32bit|64bit / 32bit|64bit / 32bit|
 |Linux|64bit|64bit / 32bit|64bit / 32bit|
+|macOS|64bit|||
 
 ※Windowsではnetrcが動きません
 
