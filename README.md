@@ -12,39 +12,38 @@ python >= 3.5
 
 Google ChromeかFirefoxのいずれかがインストールされていること（デフォルトではChromeが使用されます）。
 
+
 ```bash
-$ git clone https://github.com/Sakaki/pyniconico.git
-$ cd pyniconico
-$ pip install -r requirements.txt
-$ python niconico.py -u username -p password download sm32831006
+$ pip install pyniconico
+$ nicopy -u username -p password download sm32831006
 sm32831006
 ゆるキャン△にハマるマン しめさば
 Downloading: 100%|#######################################################################|Time: 0:00:24
 Saved as .\ゆるキャン△にハマるマン.mp4
 ```
 
-Firefox
+もしくは、
 
 ```bash
-python niconico.py -u username -p password -d firefox download sm32831006
+git clone https://github.com/Sakaki/pyniconico.git
+cd pyniconico
+pip install -r requirements.txt
+python niconico.py -u username -p password download sm32831006
 ```
 
-PhantomJS
+FirefoxをWebDriverとして使用する場合、
 
 ```bash
-python niconico.py -u username -p password -d phantomjs download sm32831006
+nicopy -u username -p password -d firefox download sm32831006
+```
+
+PhantomJSをWebDriverとして使用する場合、
+
+```bash
+nicopy -u username -p password -d phantomjs download sm32831006
 ```
 
 ※現在、PhantomJSを使用することは非推奨となっています。
-
-### インストール
-
-pipでインストールすることにより、nicopyコマンドが使えるようになります。
-
-```bash
-$ pip install .
-$ nicopy --help
-```
 
 ### Dockerで実行
 
@@ -64,7 +63,7 @@ $ docker-compose run mylist_items
 ### マイリスト一覧
 
 ```bash
-$ python niconico.py -u username -p password mylist
+$ nicopy -u username -p password mylist
 マジミラ2017 59835789
 けものフレンズ 58720332
 みんなの愛したゆゆ式 58076939
@@ -74,7 +73,7 @@ $ python niconico.py -u username -p password mylist
 ### マイリスト動画一覧
 
 ```bash
-$ python niconico.py -u username -p password mylist_items マジミラ2017
+$ nicopy -u username -p password mylist_items マジミラ2017
 マジミラ2017:
   sm1587618
   sm26470008
@@ -86,7 +85,7 @@ $ python niconico.py -u username -p password mylist_items マジミラ2017
 ### マイリストからダウンロード
 
 ```bash
-$ python niconico.py -u username -p password download --mylist ボカロ
+$ nicopy -u username -p password download --mylist ボカロ
 ボカロ
 【波音リツキレ音源】心做し 【UTAUカバー】 cillia
 Downloading: 100%|#######################################################################|Time: 0:00:03
@@ -105,7 +104,7 @@ Saved as ./【初音ミク】_Initial_Song_【オリジナルMV】.mp4
 ffmpegをインストールし、実行可能となっている（PATHに登録されている）必要があります。
 
 ```bash
-$ python niconico.py -u username -p password download --mp3 sm31606995
+$ nicopy -u username -p password download --mp3 sm31606995
 sm31606995
 ハチ MV「砂の惑星 feat.初音ミク」 ハチ
 Downloading: 100%|#######################################################################|Time: 0:00:22
