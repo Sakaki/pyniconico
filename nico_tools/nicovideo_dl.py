@@ -69,7 +69,7 @@ class DownloadVideo(NicoWalker):
                 searched = re.search("nicovideo.jp/watch/([a-z0-9]*)", watch_id)
                 assert searched is not None, "URL中に動画IDが見つかりませんでした"
                 watch_id = searched.groups()[0]
-                # 3回失敗するまで繰り返す
+            # 3回失敗するまで繰り返す
             for _ in range(3):
                 success = self.download(self.session, watch_id, self.args.location, self.args.overwrite,
                                         self.args.mp3conv, self.args.bitrate)
