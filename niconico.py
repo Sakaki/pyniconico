@@ -11,7 +11,7 @@ try:
     username, _, password = auth.authenticators("nicovideo")
     username_options = {"default": username}
     password_options = {"default": password}
-except OSError as e:
+except (OSError, FileNotFoundError, TypeError) as e:
     username = password = None
     username_options = {"prompt": "Please input your username/email"}
     password_options = {"prompt": "Please input your password", "hide_input": True}
