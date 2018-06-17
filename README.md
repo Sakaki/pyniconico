@@ -28,7 +28,7 @@ pip install -r requirements.txt
 python niconico.py -u username -p password download sm32831006
 ```
 
-動画IDの部分はURLを指定することも可能です。
+動画IDの部分はURLを指定することも可能です（URLはダブルクォートなりで囲って指定してください）。
 
 ホームディレクトリに.netrcファイル(~/.netrc)を用意することで、ユーザー名及びパスワード入力を省略することができます。
 
