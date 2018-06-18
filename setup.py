@@ -5,7 +5,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='pyniconico',
-    version='1.2',
+    version='1.3',
     description='Python NicoNico Douga downloader',
     long_description='Please read ./README.md',
     author='Sakaki Mirai',

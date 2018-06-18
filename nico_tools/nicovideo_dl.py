@@ -10,6 +10,7 @@ from nico_tools.mylist import MyList
 from progressbar import ProgressBar, Percentage, Bar, ETA
 import subprocess
 from nico_tools import mp3_tag
+import re
 
 character_replace = {
     "\\": "＼",
@@ -63,6 +64,11 @@ class DownloadVideo(NicoWalker):
         else:
             watch_ids = [self.args.vid]
         for watch_id in watch_ids:
+            # Watch IDがURLで指定された場合、動画IDを抜き出す
+            if watch_id.startswith("http"):
+                searched = re.search("nicovideo.jp/watch/([a-z0-9]*)", watch_id)
+                assert searched is not None, "URL中に動画IDが見つかりませんでした"
+                watch_id = searched.groups()[0]
             # 3回失敗するまで繰り返す
             for _ in range(3):
                 success = self.download(self.session, watch_id, self.args.location, self.args.overwrite,
@@ -139,7 +145,7 @@ class DownloadVideo(NicoWalker):
         return True
 
     @staticmethod
-    def convert_mp3(video_info, flv_path, mp3_bitrate):
+    def convert_mp3(video_info, flv_path, mp3_bitrate, leave_flv=False):
         mp3_path = flv_path[:flv_path.rfind(".")] + ".mp3"
         print(mp3_path)
         command = 'ffmpeg -y -i "{0}" -ab {1}k "{2}"'.format(flv_path, mp3_bitrate, mp3_path)
@@ -148,17 +154,22 @@ class DownloadVideo(NicoWalker):
         except subprocess.CalledProcessError:
             print("ffmpegの実行に失敗しました。")
             exit(-1)
-        mp3_tag.add_tag(mp3_path,
-                        video_info["thumbnail_url"],
-                        video_info["title"],
-                        video_info["user_nickname"],
-                        "ニコニコ動画")
+        mp3_tag.add_tag(
+            mp3_path,
+            video_info["thumbnail_url"],
+            video_info["title"],
+            video_info["user_nickname"],
+            "ニコニコ動画"
+        )
+        # mp3ファイルが存在したら元のファイルを削除
+        if leave_flv is False and os.path.exists(mp3_path):
+            os.remove(flv_path)
 
     @staticmethod
     def download(session, watch_id, save_directory, overwrite=False, convert_mp3=False, mp3_bitrate="192"):
         if convert_mp3:
             try:
-                subprocess.run(["ffmpeg -version"], shell=True, check=True, stdout=subprocess.DEVNULL)
+                subprocess.run("ffmpeg -version", shell=True, check=True, stdout=subprocess.DEVNULL)
             except subprocess.CalledProcessError:
                 print("ffmpegが実行できません。ffmpegがインストールされ、PATHに含まれているか確認してください。\n"
                       "インストールする場合、 https://www.ffmpeg.org/download.html を参照してください。")
@@ -168,7 +179,7 @@ class DownloadVideo(NicoWalker):
         flv_path = DownloadVideo.gen_video_path(save_directory, video_info)
         # ファイルが存在したら終了
         if not overwrite and os.path.exists(flv_path):
-            print("File exists. Skipping...")
+            print("ファイルが存在します。上書きする場合は --overwrite オプションを指定してください。")
             return True
         # ダウンロード実行
         widgets = ["Downloading: ", Percentage(), Bar(), ETA()]
