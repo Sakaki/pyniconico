@@ -6,6 +6,7 @@ converted_string = "ゆゆ式は復活するんだ"
 
 
 class TestConvertUnicode(TestCase):
+
     def test_convert_unicode(self):
         converted = convunichrs.convert_unichars(unicode_string)
         self.assertEqual(converted, converted_string)
