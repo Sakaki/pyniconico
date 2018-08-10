@@ -9,7 +9,7 @@ test_mylist_name = "とりあえずマイリスト"
 class TestGetMyListItem(TestCase):
 
     def setUp(self):
-        # ログイン情報はnetrcから来る
+        # ログイン情報はnetrcから取る
         auth = netrc.netrc()
         # TODO: web_driverをPhantomJSから変更する
         self.username, _, self.password = auth.authenticators("nicovideo")
