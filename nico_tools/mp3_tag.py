@@ -1,6 +1,6 @@
 import requests
 from mutagen.id3 import ID3, APIC, TIT2, TPE1, TALB
-from mutagen.id3 import ID3NoHeaderError
+from mutagen.id3 import ID3NoHeaderError, ID3v1SaveOptions
 from PIL import Image
 from io import BytesIO
 
@@ -15,11 +15,11 @@ def add_tag(file_path, thumbnail_url, title, artist, album):
     while retry >= 0:
         try:
             thumbnail_url_large = thumbnail_url + ".L"
-            coverart_page = requests.get(thumbnail_url_large)
-            if coverart_page.status_code == 404:
-                coverart_page = requests.get(thumbnail_url)
-            if coverart_page.status_code != 404:
-                jpeg_file = BytesIO(coverart_page.content)
+            cover_art_page = requests.get(thumbnail_url_large)
+            if cover_art_page.status_code == 404:
+                cover_art_page = requests.get(thumbnail_url)
+            if cover_art_page.status_code != 404:
+                jpeg_file = BytesIO(cover_art_page.content)
                 image_processor = Image.open(jpeg_file)
                 size = image_processor.size
                 smaller, larger = size if size[0] < size[1] else size[::-1]
@@ -28,13 +28,13 @@ def add_tag(file_path, thumbnail_url, title, artist, album):
                 temp = BytesIO()
                 cropped.save(temp, format="JPEG")
                 temp.seek(0)
-                coverart = temp.read()
+                cover_art = temp.read()
                 tags["APIC:"] = APIC(
                     encoding=3,
                     mime='image/jpeg',
                     type=3,
                     desc='Cover',
-                    data=coverart
+                    data=cover_art
                 )
             if title is not None:
                 tags["TIT2"] = TIT2(encoding=3, text=title)
@@ -46,4 +46,4 @@ def add_tag(file_path, thumbnail_url, title, artist, album):
         except requests.ConnectionError as e:
             print(e)
             retry -= 1
-    tags.save(file_path, v1=0, v2_version=3)
+    tags.save(file_path, v1=ID3v1SaveOptions.REMOVE, v2_version=3)
