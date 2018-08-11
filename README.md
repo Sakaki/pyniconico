@@ -133,6 +133,12 @@ Saved as ./【初音ミク】_Initial_Song_【オリジナルMV】.mp4
 
 ※Windowsではnetrcが動きません
 
+## テスト
+
+```bash
+python -m unittest discover tests
+```
+
 ## GUI (gui.py)
 
 ニコニコ動画のログインシステムが刷新され、gui.pyのメンテナンスが追い付いていません。
