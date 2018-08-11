@@ -79,7 +79,9 @@ class NicoWalker(object):
             # ログインできていたらリターン
             if self.is_logged_in():
                 return
-        web_driver_object = NicoWalker.available_drivers.get(self.web_driver, None)
+        # TODO: デフォルトのドライバを変更
+        default_driver = self.available_drivers.get("phantomjs")
+        web_driver_object = NicoWalker.available_drivers.get(self.web_driver, default_driver)
         if web_driver_object is None:
             print("指定されたWebDriverが見つかりませんでした。\n"
                   "phantomjs, chrome, firefoxのいずれかを指定してください。")

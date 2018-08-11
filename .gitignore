@@ -131,3 +131,6 @@ nico_tools/download/geckodriver/*
 !nico_tools/download/geckodriver/mpl-v2.0.md
 nico_tools/download/PhantomJS/*
 !nico_tools/download/PhantomJS/LICENSE.BSD
+
+# venv for test on windows (netrc doesn't work on windows)
+venv_unix
