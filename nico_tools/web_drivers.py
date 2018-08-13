@@ -149,10 +149,15 @@ class ChromiumDriver(ChromeDriver):
         # 解凍
         with zipfile.ZipFile(binary_dl_path) as archive_zip:
             archive_zip.extractall(self.working_directory)
+        chromium_path = (self.current_abs_directory + self.platform_driver.get("binary_path")).replace("/", os.sep)
+        if self.system in {"Linux", "Darwin"}:
+            os.chmod(chromium_path, stat.S_IRWXU)
 
     def generate_driver(self):
         options = ChromeOptions()
         options.add_argument("--headless")
+        options.add_argument('--no-sandbox')
+        options.add_argument('--disable-dev-shm-usage')
         chromium_path = (self.current_abs_directory + self.platform_driver.get("binary_path")).replace("/", os.sep)
         options.binary_location = chromium_path
         return webdriver.Chrome(self.execute_path, options=options)
