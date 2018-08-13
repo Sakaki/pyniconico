@@ -25,17 +25,18 @@ class WebDriver:
 
     # パス中の/は全てos.sepで置換
     def __init__(self):
-        current_abs_directory = os.path.dirname(os.path.abspath(__file__))
+        self.current_abs_directory = os.path.dirname(os.path.abspath(__file__))
         # 絶対パスに変換
-        self.working_directory = (current_abs_directory + self.working_directory).replace("/", os.sep)
+        self.working_directory = (self.current_abs_directory + self.working_directory).replace("/", os.sep)
         # OSやアーキテクチャの情報を取得
         self.system = platform.system()
         self.machine = platform.architecture()[0]
-        platform_driver = self.driver_info.get(self.system).get(self.machine)
+        self.platform_driver = self.driver_info.get(self.system).get(self.machine)
+        # TODO: platform_driverをもう少し利用しやすい形で残す
         # WebDriverのダウンロードURLを取得
-        self.driver_url = platform_driver.get("download_url")
+        self.driver_url = self.platform_driver.get("download_url")
         # 実行ファイルのパスを絶対パスに変換
-        self.execute_path = (current_abs_directory + platform_driver.get("path")).replace("/", os.sep)
+        self.execute_path = (self.current_abs_directory + self.platform_driver.get("path")).replace("/", os.sep)
         # DL対象ファイル名
         self.archive_path = "{0}/{1}".format(self.working_directory, "archive").replace("/", os.sep)
         # DL実行
@@ -128,6 +129,32 @@ class ChromeDriver(WebDriver):
     def generate_driver(self):
         options = ChromeOptions()
         options.add_argument("--headless")
+        return webdriver.Chrome(self.execute_path, options=options)
+
+
+class ChromiumDriver(ChromeDriver):
+    driver_info = driver_json.get("ChromiumDriver")
+    working_directory = "/download/ChromiumDriver"
+
+    def download(self):
+        super().download()
+        # Chromiumの最新ビルドの番号を取得
+        build_number = requests.get(self.platform_driver.get("build_number_url")).text
+        # Chromiumのバイナリをダウンロード
+        binary_dl_path = "{0}/{1}".format(self.working_directory, "archive_bin").replace("/", os.sep)
+        binary_url = self.platform_driver.get("binary_url").format(version=build_number)
+        response = requests.get(binary_url)
+        with open(binary_dl_path, "wb") as f:
+            f.write(response.content)
+        # 解凍
+        with zipfile.ZipFile(binary_dl_path) as archive_zip:
+            archive_zip.extractall(self.working_directory)
+
+    def generate_driver(self):
+        options = ChromeOptions()
+        options.add_argument("--headless")
+        chromium_path = (self.current_abs_directory + self.platform_driver.get("binary_path")).replace("/", os.sep)
+        options.binary_location = chromium_path
         return webdriver.Chrome(self.execute_path, options=options)
 
 

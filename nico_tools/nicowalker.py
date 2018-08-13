@@ -22,7 +22,8 @@ class NicoWalker(object):
     available_drivers = {
         "phantomjs": web_drivers.PhantomJSDriver,
         "chrome": web_drivers.ChromeDriver,
-        "firefox": web_drivers.GeckoDriver
+        "firefox": web_drivers.GeckoDriver,
+        "chromium": web_drivers.ChromiumDriver
     }
 
     def __init__(self):

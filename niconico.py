@@ -35,7 +35,7 @@ class NicoVideoArgs:
 @click.group()
 @click.option("--username", "-u", help="username/email", **username_options)
 @click.option("--password", "-p", help="password", **password_options)
-@click.option("--driver", "-d", default="chrome", type=click.Choice(["chrome", "firefox", "phantomjs"]))
+@click.option("--driver", "-d", default="chrome", type=click.Choice(["chrome", "firefox", "phantomjs", "chromium"]))
 @click.pass_context
 def niconico(context, username, password, driver):
     context.obj["username"] = username
