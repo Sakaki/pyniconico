@@ -81,7 +81,7 @@ class WebDriver:
         try:
             driver = self.generate_driver()
         except WebDriverException as e:
-            print("WebDriver(PhantomJS)を作成することができませんでした。 {}".format(e))
+            print("WebDriverを作成することができませんでした。 {}".format(e))
             exit(-1)
         return driver
 

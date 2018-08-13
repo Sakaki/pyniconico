@@ -89,7 +89,7 @@
         "download_url": "https://chromedriver.storage.googleapis.com/2.39/chromedriver_linux64.zip",
         "path": "/download/ChromiumDriver/chromedriver",
         "binary_url": "https://commondatastorage.googleapis.com/chromium-browser-snapshots/Linux_x64/{version}/chrome-linux.zip",
-        "binary_path": "/download/ChromiumDriver/chrome-linux/chrome.exe",
+        "binary_path": "/download/ChromiumDriver/chrome-linux/chrome",
         "build_number_url": "https://commondatastorage.googleapis.com/chromium-browser-snapshots/Linux_x64/LAST_CHANGE"
       }
     }
