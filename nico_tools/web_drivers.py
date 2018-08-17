@@ -22,6 +22,8 @@ class WebDriver:
     driver_info = {}
     # DLや解凍するWebDriverのファイルの保存ディレクトリ
     working_directory = "/download"
+    # WebDriverの名前
+    name = None
 
     # パス中の/は全てos.sepで置換
     def __init__(self):
@@ -81,7 +83,7 @@ class WebDriver:
         try:
             driver = self.generate_driver()
         except WebDriverException as e:
-            print("WebDriverを作成することができませんでした。 {}".format(e))
+            print("WebDriver（{0}）を作成することができませんでした。 {1}".format(self.name, e))
             exit(-1)
         return driver
 
@@ -90,6 +92,7 @@ class PhantomJSDriver(WebDriver):
     driver_info = driver_json.get("PhantomJS")
     driver_info["Windows"]["32bit"] = driver_info["Windows"]["64bit"]
     working_directory = "/download/PhantomJS"
+    name = "PhantomJS"
 
     def extract(self):
         if self.system == "Windows":
@@ -104,6 +107,7 @@ class PhantomJSDriver(WebDriver):
 class GeckoDriver(WebDriver):
     driver_info = driver_json.get("GeckoDriver")
     working_directory = "/download/geckodriver"
+    name = "GeckoDriver"
 
     def extract(self):
         if self.system == "Windows":
@@ -120,6 +124,7 @@ class GeckoDriver(WebDriver):
 class ChromeDriver(WebDriver):
     driver_info = driver_json.get("ChromeDriver")
     working_directory = "/download/ChromeDriver"
+    name = "ChromeDriver"
 
     def extract(self):
         self.extract_zip()
@@ -135,6 +140,7 @@ class ChromeDriver(WebDriver):
 class ChromiumDriver(ChromeDriver):
     driver_info = driver_json.get("ChromiumDriver")
     working_directory = "/download/ChromiumDriver"
+    name = "ChromiumDriver"
 
     def download(self):
         super().download()
