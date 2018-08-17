@@ -11,10 +11,12 @@ from nico_tools import web_drivers
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions
+from selenium.common.exceptions import TimeoutException
+import nico_tools
 
-working_dir = path.dirname(path.abspath(__file__))
-cookie_path = "{0}/{1}".format(working_dir, "cookie.bin")
-cookie_path = cookie_path.replace("/", os.sep)
+# working_dir = path.dirname(path.abspath(__file__))
+cookie_path = "{0}{1}{2}".format(nico_tools.storage_path, os.sep, "cookie.bin")
+# cookie_path = cookie_path.replace("/", os.sep)
 
 
 class NicoWalker(object):
@@ -22,7 +24,8 @@ class NicoWalker(object):
     available_drivers = {
         "phantomjs": web_drivers.PhantomJSDriver,
         "chrome": web_drivers.ChromeDriver,
-        "firefox": web_drivers.GeckoDriver
+        "firefox": web_drivers.GeckoDriver,
+        "chromium": web_drivers.ChromiumDriver
     }
 
     def __init__(self):
@@ -79,13 +82,8 @@ class NicoWalker(object):
             # ログインできていたらリターン
             if self.is_logged_in():
                 return
-        # TODO: デフォルトのドライバを変更
-        default_driver = self.available_drivers.get("phantomjs")
+        default_driver = self.available_drivers.get("chromium")
         web_driver_object = NicoWalker.available_drivers.get(self.web_driver, default_driver)
-        if web_driver_object is None:
-            print("指定されたWebDriverが見つかりませんでした。\n"
-                  "phantomjs, chrome, firefoxのいずれかを指定してください。")
-            exit(-1)
         driver = web_driver_object().get_driver()
         login_page_url = "https://account.nicovideo.jp/login"
         driver.get(login_page_url)
@@ -96,8 +94,11 @@ class NicoWalker(object):
         mail.send_keys(self.mail)
         password.send_keys(self.password)
         submit.submit()
-        WebDriverWait(driver, 10).until(expected_conditions.presence_of_element_located(
-            (By.ID, "siteHeaderUserNickNameContainer")))
+        try:
+            WebDriverWait(driver, 10).until(expected_conditions.presence_of_element_located(
+                (By.ID, "siteHeaderUserNickNameContainer")))
+        except TimeoutException:
+            raise LoginFailedException("ログインに失敗しました。ユーザー名とパスワードを確認してください。")
         mylist_url = "http://www.nicovideo.jp/api/deflist/list"
         driver.get(mylist_url)
         # cookieを保存
@@ -107,7 +108,7 @@ class NicoWalker(object):
             # クッキーを保存
             self.save_cookies()
         else:
-            raise LoginFailedException("ログインに失敗しました")
+            raise LoginFailedException("ログインに失敗しました。")
 
     def load_cookies(self):
         with open(cookie_path, "rb") as f:

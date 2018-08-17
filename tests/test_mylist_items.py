@@ -2,6 +2,7 @@ from unittest import TestCase
 import netrc
 from niconico import NicoVideoArgs
 from nico_tools.mylist_items import GetMyListItems
+import tests
 
 test_mylist_name = "とりあえずマイリスト"
 
@@ -11,7 +12,6 @@ class TestGetMyListItem(TestCase):
     def setUp(self):
         # ログイン情報はnetrcから取る
         auth = netrc.netrc()
-        # TODO: web_driverをPhantomJSから変更する
         self.username, _, self.password = auth.authenticators("nicovideo")
 
     def test_get_mylist(self):
@@ -19,7 +19,7 @@ class TestGetMyListItem(TestCase):
         arguments_dict = {
             "mail": self.username,
             "password": self.password,
-            "web_driver": "phantomjs"
+            "web_driver": tests.test_driver
         }
         arguments = NicoVideoArgs(arguments_dict)
         mylist_object = GetMyListItems(arguments)

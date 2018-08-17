@@ -8,8 +8,6 @@
 
 python >= 3.5
 
-Google ChromeかFirefoxのいずれかをインストールしてください（デフォルトではChromeが使用されます）。
-
 ```bash
 $ pip install pyniconico
 $ nicopy -u username -p password download sm32831006
@@ -41,6 +39,20 @@ $ chmod 600 ~/.netrc
 $ nicopy download sm32831006
 ```
 
+### WebDriverを変更する
+
+ニコニコ動画にログインする際に使用するWebDriverを変更できます。
+
+デフォルトだとChromiumが使用されますが、エラーが起きた際にお試しください。
+
+また、ChromeかFirefoxを使用する際は、システムに使用するブラウザがインストールされている事を確認してください。
+
+ChromeをWebDriverとして使用する場合、
+
+```bash
+nicopy -d chrome download sm32831006
+```
+
 FirefoxをWebDriverとして使用する場合、
 
 ```bash
@@ -53,7 +65,11 @@ PhantomJSをWebDriverとして使用する場合、
 nicopy -d phantomjs download sm32831006
 ```
 
-※現在、PhantomJSを使用することは非推奨となっています。
+※PhantomJSを使用することは非推奨となっています。
+
+GUIの無い環境だとWebDriverを動かすためのライブラリが揃っておらず、エラーが起きることが多いです。
+
+そういった場合はPhantomJSを利用するか、パッケージマネージャでfirefoxやchrome(chromium)をインストールするとうまく行くことがあります。
 
 ### Dockerで実行
 
@@ -125,50 +141,26 @@ Saved as ./【初音ミク】_Initial_Song_【オリジナルMV】.mp4
 
 ## 動作環境
 
-|OS / ブラウザ|Chrome|Firefox|PhantomJS|
-|---|---|---|---|
-|Windows|64bit / 32bit|64bit / 32bit|64bit / 32bit|
-|Linux|64bit|64bit / 32bit|64bit / 32bit|
-|macOS|64bit|||
+|OS / ブラウザ|Chrome|Firefox|PhantomJS|Chromium|
+|---|---|---|---|---|
+|Windows|64bit / 32bit|64bit / 32bit|64bit / 32bit|64bit / 32bit|
+|Linux|64bit|64bit / 32bit|64bit / 32bit|64bit|
+|macOS|64bit||||
 
 ※Windowsではnetrcが動きません
+
+## アンインストール
+
+ユーザーのホームディレクトリに.pyniconicoディレクトリが自動作成されています。
+
+こちらは消しても問題ありませんので、アンインストール時に削除してください。
 
 ## テスト
 
 ```bash
+cd pyniconico
 python -m unittest discover tests
 ```
-
-## GUI (gui.py)
-
-ニコニコ動画のログインシステムが刷新され、gui.pyのメンテナンスが追い付いていません。
-
-恐らく動かないと思いますので、改善されるまでしばらくお待ちください・・・
-
----
-
-```bash
-$ pip install requirements_gui.txt
-$ python gui.py
-```
-
-で起動します。初回はユーザー名、パスワード、URLまたは動画IDをすべて入力する必要があります。
-
-![nicovideo_dl](https://user-images.githubusercontent.com/980141/29494124-72a2b4d4-85de-11e7-894d-9112dbac6e03.png)
-
-2回目以降はクッキーを用いてログインを試み、成功した場合はユーザー名やパスワードの入力なしでもダウンロードができます。
-
-### まとめてダウンロード
-
-マイリスト一括ダウンロードの「選択」ボタンを押してください。
-
-![nicovideo_dl_mylist](https://user-images.githubusercontent.com/980141/29494138-a967c586-85de-11e7-91f5-d125775ae09e.png)
-
-### mp3変換
-
-設定ボタンからmp3変換を有効にし、ビットレートを調整してください。
-
-![nicovideo_dl_settings](https://user-images.githubusercontent.com/980141/29494148-d805f75a-85de-11e7-8cfd-02e5635f4025.png)
 
 ## ライセンス
 
@@ -180,10 +172,10 @@ pyniconicoのソースコードのライセンスについては、LICENSEファ
 
 |WebDriver|Webサイト|ライセンス|
 |---|---|---|
-|ChdomeDriver|http://chromedriver.chromium.org/|明記無し|
+|ChdomeDriver|http://chromedriver.chromium.org/|明記無し（恐らくBSD license）|
 |geckodriver|https://github.com/mozilla/geckodriver|Mozilla Public License Version 2.0|
 |PhantomJS|http://phantomjs.org/download.html|BSD license|
 
-WebDriverは nico_tools/download 以下にダウンロードされます。
+また、[Chromium](https://www.chromium.org/Home)については[こちら](https://chromium.googlesource.com/chromium/src/+/master/LICENSE)をご覧ください。
 
-各ディレクトリにライセンスファイルを配置していますので、そちらもご参照ください。
+WebDriverはホームディレクトリの .pyniconico/download 以下にダウンロードされます。

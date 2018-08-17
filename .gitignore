@@ -127,6 +127,8 @@ node_modules
 # WebDriver files
 nico_tools/download/ChromeDriver/*
 !nico_tools/download/ChromeDriver/README.md
+nico_tools/download/ChromiumDriver/*
+!nico_tools/download/ChromiumDriver/README.md
 nico_tools/download/geckodriver/*
 !nico_tools/download/geckodriver/mpl-v2.0.md
 nico_tools/download/PhantomJS/*
