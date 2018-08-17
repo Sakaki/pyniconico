@@ -3,6 +3,7 @@ import netrc
 from niconico import NicoVideoArgs
 from nico_tools.nicovideo_dl import DownloadVideo
 import os
+import tests
 
 video_id = "sm20242331"
 video_file_name = "CB.mp4.mp4"
@@ -14,7 +15,6 @@ class TestDownloadVideo(TestCase):
     def setUp(self):
         # ログイン情報はnetrcから取る
         auth = netrc.netrc()
-        # TODO: web_driverをPhantomJSから変更する
         self.username, _, self.password = auth.authenticators("nicovideo")
 
     def test_download_video(self):
@@ -22,7 +22,7 @@ class TestDownloadVideo(TestCase):
         arguments_dict = {
             "mail": self.username,
             "password": self.password,
-            "web_driver": "phantomjs"
+            "web_driver": tests.test_driver
         }
         arguments = NicoVideoArgs(arguments_dict)
         download_obj = DownloadVideo(arguments)

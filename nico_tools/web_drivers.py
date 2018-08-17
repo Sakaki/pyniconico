@@ -11,6 +11,7 @@ import zipfile
 import tarfile
 import json
 import stat
+import nico_tools
 
 with open("{}/web_drivers.json".format(os.path.dirname(os.path.abspath(__file__)))) as f:
     driver_json = json.loads(f.read())
@@ -27,9 +28,11 @@ class WebDriver:
 
     # パス中の/は全てos.sepで置換
     def __init__(self):
-        self.current_abs_directory = os.path.dirname(os.path.abspath(__file__))
+        self.current_abs_directory = nico_tools.storage_path
         # 絶対パスに変換
         self.working_directory = (self.current_abs_directory + self.working_directory).replace("/", os.sep)
+        if not os.path.exists(self.working_directory):
+            os.makedirs(self.working_directory)
         # OSやアーキテクチャの情報を取得
         self.system = platform.system()
         self.machine = platform.architecture()[0]
@@ -41,17 +44,19 @@ class WebDriver:
         self.execute_path = (self.current_abs_directory + self.platform_driver.get("path")).replace("/", os.sep)
         # DL対象ファイル名
         self.archive_path = "{0}/{1}".format(self.working_directory, "archive").replace("/", os.sep)
-        # DL実行
-        self.download()
+        # アーカイブが無かったらDL実行
+        if not os.path.exists(self.archive_path):
+            self.prepare_download()
+            self.download()
         # DLしたらファイルを解凍
         if not os.path.exists(self.execute_path):
             self.extract()
 
+    def prepare_download(self):
+        pass
+
     # WebDriverのアーカイブをダウンロード
     def download(self):
-        # もしファイルが存在したらスキップ
-        if os.path.exists(self.archive_path):
-            return
         print("WebDriverを取得しています。")
         raw = requests.get(self.driver_url, stream=True)
         with open(self.archive_path, "wb") as f:
@@ -141,19 +146,27 @@ class ChromiumDriver(ChromeDriver):
     driver_info = driver_json.get("ChromiumDriver")
     working_directory = "/download/ChromiumDriver"
     name = "ChromiumDriver"
+    binary_dl_path = None
+
+    def prepare_download(self):
+        self.binary_dl_path = "{0}/{1}".format(self.working_directory, "archive_bin").replace("/", os.sep)
 
     def download(self):
         super().download()
+        print("Chromiumバイナリをダウンロードしています...")
         # Chromiumの最新ビルドの番号を取得
         build_number = requests.get(self.platform_driver.get("build_number_url")).text
         # Chromiumのバイナリをダウンロード
-        binary_dl_path = "{0}/{1}".format(self.working_directory, "archive_bin").replace("/", os.sep)
         binary_url = self.platform_driver.get("binary_url").format(version=build_number)
         response = requests.get(binary_url)
-        with open(binary_dl_path, "wb") as f:
+        with open(self.binary_dl_path, "wb") as f:
             f.write(response.content)
+        print("Chromiumのダウンロードが完了しました。")
+
+    def extract(self):
+        super().extract()
         # 解凍
-        with zipfile.ZipFile(binary_dl_path) as archive_zip:
+        with zipfile.ZipFile(self.binary_dl_path) as archive_zip:
             archive_zip.extractall(self.working_directory)
         chromium_path = (self.current_abs_directory + self.platform_driver.get("binary_path")).replace("/", os.sep)
         if self.system in {"Linux", "Darwin"}:
