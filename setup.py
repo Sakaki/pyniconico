@@ -5,7 +5,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='pyniconico',
-    version='1.3',
+    version='1.4',
     description='Python NicoNico Douga downloader',
     long_description='Please read ./README.md',
     author='Sakaki Mirai',
@@ -30,10 +30,7 @@ setup(
     ''',
     package_data={
         'nico_tools': [
-            'web_drivers.json',
-            'download/ChromeDriver/README.md',
-            'download/geckodriver/mpl-v2.0.md',
-            'download/PhantomJS/LICENSE.BSD'
+            'web_drivers.json'
         ]
     },
 )
